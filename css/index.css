@@ -423,7 +423,7 @@ nav a:focus-visible {
 .scroll-reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 700ms ease, transform 700ms ease;
+    transition: opacity 700ms ease var(--reveal-delay, 0ms), transform 700ms ease var(--reveal-delay, 0ms);
 }
 
 .scroll-reveal.is-visible {

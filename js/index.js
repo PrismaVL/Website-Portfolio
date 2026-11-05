@@ -38,7 +38,13 @@ if (!prefersReducedMotion.matches && "IntersectionObserver" in window) {
 
         Array.from(section.children).forEach((child) => {
             if (child.classList.contains("stack-list")) {
-                revealTargets.push(...child.querySelectorAll(".stack-group > h3, .stack-group > .stack-items"));
+                child.querySelectorAll(".stack-group").forEach((group) => {
+                    revealTargets.push(group.querySelector("h3"));
+                    group.querySelectorAll(".stack-items li").forEach((item, index) => {
+                        item.style.setProperty("--reveal-delay", `${index * 100}ms`);
+                        revealTargets.push(item);
+                    });
+                });
             } else {
                 revealTargets.push(child);
             }
