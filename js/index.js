@@ -147,10 +147,14 @@ document.addEventListener("click", (event) => {
     }
 
     const start = window.scrollY;
-    const end = Math.min(
-        start + section.getBoundingClientRect().top,
+    const sectionTop = start + section.getBoundingClientRect().top;
+    const alignmentOffset = section.id === "about" || section.id === "stack"
+        ? (window.innerHeight - section.offsetHeight) / 2
+        : 0;
+    const end = Math.max(0, Math.min(
+        sectionTop - alignmentOffset,
         document.documentElement.scrollHeight - window.innerHeight
-    );
+    ));
 
     if (prefersReducedMotion.matches) {
         window.scrollTo({ top: end, behavior: "instant" });
