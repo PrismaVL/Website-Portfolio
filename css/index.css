@@ -382,39 +382,74 @@ nav a:focus-visible {
     max-width: 650px;
 }
 
-.skills-grid {
+.stack-section {
+    padding-block: 76px 88px;
+}
+
+.content-section .stack-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 28px;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.stack-title span {
+    color: var(--accent);
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.stack-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
 }
 
-.skills-group {
-    padding: 24px;
-    border: 1px solid var(--line);
-    background: var(--surface);
-}
-
-.skills-group h3 {
-    margin: 0 0 16px;
-    font-size: 1.05rem;
-}
-
-.skills-group ul {
+.stack-group {
     display: grid;
-    gap: 10px;
+    grid-template-columns: minmax(200px, 0.75fr) minmax(0, 1.25fr);
+    align-items: start;
+    gap: 28px;
+    padding-block: 28px;
+    border-top: 1px solid var(--line);
+}
+
+.stack-group h3 {
     margin: 0;
-    padding-left: 20px;
+    color: var(--muted);
+    font-family: Impact, "Arial Narrow", sans-serif;
+    font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
-.skills-group--hard ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 24px;
+.stack-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
-@media (max-width: 480px) {
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
+.stack-items li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.35;
+}
+
+.stack-items img {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
 }
 
 .project-carousel {
@@ -786,6 +821,28 @@ nav a:focus-visible {
 
     .hero__details strong {
         font-size: 0.78rem;
+    }
+
+    .stack-group {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding-block: 24px;
+    }
+
+    .stack-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 12px;
+    }
+
+    .stack-items li {
+        gap: 9px;
+        font-size: 0.9rem;
+    }
+
+    .stack-items img {
+        flex-basis: 32px;
+        width: 32px;
+        height: 32px;
     }
 
     .project-card {
