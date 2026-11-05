@@ -21,6 +21,22 @@ window.addEventListener("pageshow", () => {
     window.scrollTo(0, 0);
 });
 
+const scrollProgress = document.querySelector(".scroll-progress__fill");
+
+if (scrollProgress) {
+    function updateScrollProgress() {
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollableHeight > 0
+            ? Math.min(window.scrollY / scrollableHeight, 1)
+            : 0;
+        scrollProgress.style.setProperty("--scroll-progress", `${progress * 100}%`);
+    }
+
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+    window.addEventListener("resize", updateScrollProgress);
+    updateScrollProgress();
+}
+
 document.querySelectorAll(".project-carousel").forEach((carousel) => {
     const track = carousel.querySelector(".project-carousel__track");
     const slides = Array.from(track.children);

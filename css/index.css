@@ -14,11 +14,40 @@
 
 html {
     scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
 }
 
 html.intro-active,
 html.intro-active body {
     overflow: hidden;
+}
+
+.scroll-progress {
+    position: fixed;
+    z-index: 20;
+    top: 20px;
+    right: 12px;
+    bottom: 20px;
+    width: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #3a3a3d;
+    pointer-events: none;
+}
+
+html.intro-active .scroll-progress {
+    visibility: hidden;
+}
+
+.scroll-progress__fill {
+    width: 100%;
+    height: var(--scroll-progress, 0%);
+    border-radius: inherit;
+    background: var(--text);
 }
 
 body {
