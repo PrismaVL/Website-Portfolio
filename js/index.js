@@ -27,6 +27,7 @@ if (!prefersReducedMotion.matches) {
     let targetScrollY = window.scrollY;
     let scrollFrame = 0;
     let previousFrame = 0;
+    let scrollEase = 100;
 
     function stopWheelScroll() {
         cancelAnimationFrame(scrollFrame);
@@ -40,7 +41,7 @@ if (!prefersReducedMotion.matches) {
             previousFrame = timestamp;
         }
 
-        const progress = 1 - Math.exp(-(timestamp - previousFrame) / 100);
+        const progress = 1 - Math.exp(-(timestamp - previousFrame) / scrollEase);
         previousFrame = timestamp;
         const distance = targetScrollY - window.scrollY;
 
@@ -63,13 +64,19 @@ if (!prefersReducedMotion.matches) {
         const delta = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
             : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerHeight
             : 1);
+        const absoluteDelta = Math.abs(event.deltaY);
+        const isMouseWheel = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+            || (event.deltaMode === WheelEvent.DOM_DELTA_PIXEL
+                && absoluteDelta >= 80
+                && (absoluteDelta % 100 === 0 || absoluteDelta % 120 === 0));
         const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+        scrollEase = isMouseWheel ? 150 : 100;
 
         if (!scrollFrame) {
             targetScrollY = window.scrollY;
         }
 
-        targetScrollY = Math.max(0, Math.min(targetScrollY + delta, maxScrollY));
+        targetScrollY = Math.max(0, Math.min(targetScrollY + delta * (isMouseWheel ? 0.75 : 1), maxScrollY));
         event.preventDefault();
 
         if (!scrollFrame) {
