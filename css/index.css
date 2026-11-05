@@ -16,6 +16,11 @@ html {
     scroll-behavior: smooth;
 }
 
+html.intro-active,
+html.intro-active body {
+    overflow: hidden;
+}
+
 body {
     margin: 0;
     overflow-x: hidden;
@@ -337,6 +342,10 @@ nav a:focus-visible {
 .content-section {
     padding-block: 76px;
     border-top: 1px solid var(--line);
+}
+
+.content-section#about {
+    border-top: 0;
 }
 
 .content-section h2 {

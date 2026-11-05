@@ -2,6 +2,17 @@ if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
 }
 
+const intro = document.querySelector(".intro");
+
+if (intro) {
+    document.documentElement.classList.add("intro-active");
+    intro.addEventListener("animationend", (event) => {
+        if (event.animationName === "intro-dismiss") {
+            document.documentElement.classList.remove("intro-active");
+        }
+    });
+}
+
 window.addEventListener("pageshow", () => {
     if (window.location.hash) {
         history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
