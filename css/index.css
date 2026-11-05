@@ -276,6 +276,10 @@ nav a:focus-visible {
     text-transform: uppercase;
 }
 
+.content-section#about > .eyebrow {
+    color: var(--muted);
+}
+
 .hero h1 {
     max-width: 700px;
     margin: 0;
@@ -375,6 +379,17 @@ nav a:focus-visible {
     border-top: 1px solid var(--line);
 }
 
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .content-section#about {
     border-top: 0;
 }
@@ -403,9 +418,10 @@ nav a:focus-visible {
     align-items: center;
     gap: 12px;
     margin: 0 0 28px;
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0;
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.19em;
     text-transform: uppercase;
 }
 
@@ -432,7 +448,7 @@ nav a:focus-visible {
 
 .stack-group h3 {
     margin: 0;
-    color: var(--muted);
+    color: var(--accent);
     font-family: Impact, "Arial Narrow", sans-serif;
     font-size: clamp(1.8rem, 3.2vw, 2.5rem);
     font-weight: 400;
@@ -455,8 +471,11 @@ nav a:focus-visible {
     gap: 12px;
     min-width: 0;
     color: var(--text);
-    font-size: 1.05rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.19em;
     line-height: 1.35;
+    text-transform: uppercase;
 }
 
 .stack-items img {
@@ -860,7 +879,6 @@ nav a:focus-visible {
 
     .stack-items li {
         gap: 9px;
-        font-size: 0.9rem;
     }
 
     .stack-items img {
@@ -904,6 +922,12 @@ nav a:focus-visible {
     }
 
     .project-carousel__track {
+        transition: none;
+    }
+
+    .scroll-reveal {
+        opacity: 1;
+        transform: none;
         transition: none;
     }
 

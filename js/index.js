@@ -23,18 +23,50 @@ window.addEventListener("pageshow", () => {
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-if (!prefersReducedMotion.matches) {
-    let targetScrollY = window.scrollY;
-    let scrollFrame = 0;
-    let previousFrame = 0;
-    let scrollEase = 100;
+if (!prefersReducedMotion.matches && "IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: "0px 0px -20% 0px", threshold: 0.01 });
 
-    function stopWheelScroll() {
-        cancelAnimationFrame(scrollFrame);
-        scrollFrame = 0;
-        previousFrame = 0;
-        targetScrollY = window.scrollY;
-    }
+    document.querySelectorAll(".content-section").forEach((section) => {
+        const revealTargets = [];
+
+        Array.from(section.children).forEach((child) => {
+            if (child.classList.contains("stack-list")) {
+                revealTargets.push(...child.querySelectorAll(".stack-group > h3, .stack-group > .stack-items"));
+            } else {
+                revealTargets.push(child);
+            }
+        });
+
+        revealTargets.forEach((target) => {
+            target.classList.add("scroll-reveal");
+            revealObserver.observe(target);
+        });
+    });
+}
+
+let targetScrollY = window.scrollY;
+let scrollFrame = 0;
+let previousFrame = 0;
+let navigationFrame = 0;
+
+function stopWheelScroll() {
+    cancelAnimationFrame(scrollFrame);
+    cancelAnimationFrame(navigationFrame);
+    scrollFrame = 0;
+    previousFrame = 0;
+    navigationFrame = 0;
+    targetScrollY = window.scrollY;
+}
+
+if (!prefersReducedMotion.matches) {
+    let scrollEase = 100;
 
     function animateWheelScroll(timestamp) {
         if (!previousFrame) {
@@ -60,6 +92,9 @@ if (!prefersReducedMotion.matches) {
         if (event.ctrlKey || !event.deltaY || !event.cancelable) {
             return;
         }
+
+        cancelAnimationFrame(navigationFrame);
+        navigationFrame = 0;
 
         const delta = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
             : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerHeight
@@ -88,6 +123,66 @@ if (!prefersReducedMotion.matches) {
     window.addEventListener("touchstart", stopWheelScroll, { passive: true });
     window.addEventListener("keydown", stopWheelScroll);
 }
+
+document.querySelector("nav")?.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) {
+        return;
+    }
+
+    const link = event.target.closest("a[href^='#']");
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
+    const section = document.getElementById(link.hash.slice(1));
+    if (!section) {
+        return;
+    }
+
+    event.preventDefault();
+    stopWheelScroll();
+
+    if (window.location.hash !== link.hash) {
+        history.pushState(null, "", link.hash);
+    }
+
+    const start = window.scrollY;
+    const end = Math.min(
+        start + section.getBoundingClientRect().top,
+        document.documentElement.scrollHeight - window.innerHeight
+    );
+
+    if (prefersReducedMotion.matches) {
+        window.scrollTo({ top: end, behavior: "instant" });
+        return;
+    }
+
+    const duration = Math.min(1800, Math.max(1000, Math.abs(end - start) * 0.8));
+    let animationStart;
+
+    function animateNavigation(timestamp) {
+        if (animationStart === undefined) {
+            animationStart = timestamp;
+        }
+
+        const progress = Math.min((timestamp - animationStart) / duration, 1);
+        const easedProgress = progress < 0.5
+            ? 4 * progress ** 3
+            : 1 - ((-2 * progress + 2) ** 3) / 2;
+        window.scrollTo({
+            top: start + (end - start) * easedProgress,
+            behavior: "instant"
+        });
+
+        if (progress < 1) {
+            navigationFrame = requestAnimationFrame(animateNavigation);
+        } else {
+            navigationFrame = 0;
+        }
+    }
+
+    navigationFrame = requestAnimationFrame(animateNavigation);
+});
 
 const scrollProgress = document.querySelector(".scroll-progress__fill");
 
