@@ -124,12 +124,12 @@ if (!prefersReducedMotion.matches) {
     window.addEventListener("keydown", stopWheelScroll);
 }
 
-document.querySelector("nav")?.addEventListener("click", (event) => {
+document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
         return;
     }
 
-    const link = event.target.closest("a[href^='#']");
+    const link = event.target.closest("nav a[href^='#'], .hero__link[href^='#']");
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
         return;
     }

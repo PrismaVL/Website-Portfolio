@@ -24,6 +24,8 @@ html::-webkit-scrollbar {
 html.intro-active,
 html.intro-active body {
     overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .scroll-progress {
@@ -67,7 +69,9 @@ a {
     z-index: 30;
     inset: 0;
     overflow: hidden;
-    pointer-events: none;
+    pointer-events: auto;
+    -webkit-user-select: none;
+    user-select: none;
     animation: intro-dismiss 0s linear 3.29s forwards;
 }
 
