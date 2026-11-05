@@ -51,6 +51,40 @@ html.intro-active body {
     transition: transform 120ms linear;
 }
 
+.back-to-top {
+    position: fixed;
+    z-index: 20;
+    top: 20px;
+    left: 20px;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 1.4rem;
+    line-height: 1;
+    text-decoration: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease, background 180ms ease;
+}
+
+.back-to-top.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+    color: var(--accent);
+}
+
 body {
     margin: 0;
     overflow-x: hidden;

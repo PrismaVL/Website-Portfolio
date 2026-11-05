@@ -129,7 +129,7 @@ document.addEventListener("click", (event) => {
         return;
     }
 
-    const link = event.target.closest("nav a[href^='#'], .hero__link[href^='#']");
+    const link = event.target.closest("nav a[href^='#'], .hero__link[href^='#'], .back-to-top[href^='#']");
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
         return;
     }
@@ -183,6 +183,22 @@ document.addEventListener("click", (event) => {
 
     navigationFrame = requestAnimationFrame(animateNavigation);
 });
+
+const aboutSection = document.getElementById("about");
+const backToTop = document.querySelector(".back-to-top");
+
+if (aboutSection && backToTop) {
+    function updateBackToTopVisibility() {
+        backToTop.classList.toggle(
+            "is-visible",
+            aboutSection.getBoundingClientRect().top <= window.innerHeight * 0.25
+        );
+    }
+
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    window.addEventListener("resize", updateBackToTopVisibility);
+    updateBackToTopVisibility();
+}
 
 const scrollProgress = document.querySelector(".scroll-progress__fill");
 
