@@ -1,100 +1,192 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Portfolio</title>
+    <meta name="theme-color" content="#10110f">
+    <title>PrismaVL — Portfolio</title>
+    <link rel="stylesheet" href="websiteportfolio.css">
+    <script src="websiteportfolio.js" defer></script>
 </head>
 <body>
+    <div class="intro" aria-hidden="true">
+        <h2 class="intro__name"><span class="intro__letter">P</span><span class="intro__letter">r</span><span class="intro__letter">i</span><span class="intro__letter">s</span><span class="intro__letter">m</span><span class="intro__letter">a</span><span class="intro__letter">VL</span></h2>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+        <div class="intro__panel"></div>
+    </div>
 
-    <header>
-        <h1>Your Name</h1>
-        <p>Personal Portfolio</p>
-
-        <nav>
-            <a href="#home">Home</a> |
-            <a href="#about">About Me</a> |
-            <a href="#education">Education</a> |
-            <a href="#skills">Skills</a> |
-            <a href="#projects">Projects</a> |
+    <header class="site-header">
+        <a class="wordmark" href="#home">Prisma<span>VL</span></a>
+        <nav aria-label="Main navigation">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
 
-    <hr>
-
     <main>
-
-        <section id="home">
-            <h2>Welcome to My Portfolio</h2>
-            <img src="profile.jpg" alt="My Profile Picture" width="200">
-            <p>Hello! My name is Your Name. Welcome to my personal website.</p>
+        <section class="hero" id="home">
+            <div class="hero__visual" aria-hidden="true">
+                <span class="hero__visual-index">PV / 01</span>
+                <span class="hero__monogram">PV</span>
+                <span class="hero__visual-name">PrismaVL</span>
+                <span class="hero__visual-caption">DESIGNING WITH INTENTION</span>
+                <span class="hero__visual-orbit"></span>
+            </div>
+            <div class="hero__content">
+                <p class="eyebrow">PrismaVL <span aria-hidden="true">/</span> Portfolio</p>
+                <h1>Jaymard T.<br><span>Licas</span></h1>
+                <p class="hero__role">UI/UX Designer</p>
+                <blockquote class="hero__quote">"I bring ideas to life through thoughtful, accessible design."</blockquote>
+                <a class="hero__link" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
+            </div>
+            <div class="hero__details" aria-label="Profile details">
+                <div><span>BRAND</span><strong>PrismaVL</strong></div>
+                <div><span>SPECIALIZATION</span><strong>Web &amp; Mobile Applications</strong></div>
+                <div><span>DESIGN FOCUS</span><strong>UI/UX Design</strong></div>
+            </div>
         </section>
 
-        <hr>
-
-        <section id="about">
+        <section class="content-section" id="about">
+            <p class="eyebrow">A little about me</p>
             <h2>About Me</h2>
-            <p>
-                Write a short introduction about yourself,
-                your interests, hobbies, and personal background.
-            </p>
+            <p>I'm Jaymard T. Licas, a 22-year-old UI/UX designer studying at FEU Institute of Technology. I focus on making websites look aesthetically better, accessible, and user friendly. I take pride in creating memorable projects while staying flexible and adaptable to new ideas and design directions. I also do video-editing commissions and other freelance works.</p>
         </section>
 
-        <hr>
-
-        <section id="education">
-            <h2>Education</h2>
-            <ul>
-                <li>Elementary - School Name</li>
-                <li>Junior High School - School Name</li>
-                <li>Senior High School - School Name</li>
-                <li>College - University Name</li>
-            </ul>
-        </section>
-
-        <hr>
-
-        <section id="skills">
+        <section class="content-section" id="skills">
+            <p class="eyebrow">What I work with</p>
             <h2>Skills</h2>
-            <ul>
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-                <li>Communication</li>
-                <li>Problem Solving</li>
-            </ul>
+            <div class="skills-grid">
+                <div class="skills-group">
+                    <h3>Soft Skills</h3>
+                    <ul>
+                        <li>Communication</li>
+                        <li>Creativity &amp; Ideation</li>
+                        <li>Flexibility &amp; Adaptability</li>
+                        <li>Time Management</li>
+                    </ul>
+                </div>
+                <div class="skills-group skills-group--hard">
+                    <h3>Hard Skills</h3>
+                    <ul>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>JavaScript</li>     
+                        <li>UI/UX Design</li>
+                        <li>Figma</li>
+                        <li>Adobe Photoshop</li>
+                        <li>Adobe Premiere Pro</li>
+                        <li>Canva</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
-        <hr>
-
-        <section id="projects">
-            <h2>My Projects</h2>
-
-            <h3>Project 1</h3>
-            <p>Description of your first project.</p>
-
-            <h3>Project 2</h3>
-            <p>Description of your second project.</p>
+        <section class="content-section" id="projects">
+            <p class="eyebrow">Selected work</p>
+            <h2>Projects</h2>
+            <div class="project-carousel" role="region" aria-roledescription="carousel" aria-label="Projects" tabindex="0">
+                <div class="project-carousel__filters" role="group" aria-label="Filter projects by category">
+                    <button class="project-carousel__filter" type="button" data-category="all" aria-pressed="true">All</button>
+                    <button class="project-carousel__filter" type="button" data-category="video" aria-pressed="false">Video</button>
+                    <button class="project-carousel__filter" type="button" data-category="graphics" aria-pressed="false">Graphics</button>
+                    <button class="project-carousel__filter" type="button" data-category="website" aria-pressed="false">Website</button>
+                </div>
+                <div class="project-carousel__viewport">
+                    <div class="project-carousel__track">
+                        <article class="project-card" data-category="website" role="group" aria-roledescription="slide" aria-label="1 of 5">
+                            <div class="project-card__preview project-card__preview--one" aria-hidden="true">
+                                <span class="project-card__index">PROJECT / 01</span>
+                                <span class="project-card__monogram">PV</span>
+                                <span class="project-card__caption">UI / UX CONCEPT</span>
+                            </div>
+                            <div class="project-card__info">
+                                <p class="eyebrow">01 / UI/UX Design</p>
+                                <h3>Project 1</h3>
+                                <p>Description of your first project.</p>
+                            </div>
+                        </article>
+                        <article class="project-card" data-category="website" role="group" aria-roledescription="slide" aria-label="2 of 5" aria-hidden="true" inert>
+                            <div class="project-card__preview project-card__preview--two" aria-hidden="true">
+                                <span class="project-card__index">PROJECT / 02</span>
+                                <span class="project-card__phone"><i></i><i></i><i></i></span>
+                                <span class="project-card__caption">MOBILE APP CONCEPT</span>
+                            </div>
+                            <div class="project-card__info">
+                                <p class="eyebrow">02 / Mobile Design</p>
+                                <h3>Project 2</h3>
+                                <p>Description of your second project.</p>
+                            </div>
+                        </article>
+                        <article class="project-card" data-category="graphics" role="group" aria-roledescription="slide" aria-label="3 of 5" aria-hidden="true" inert>
+                            <div class="project-card__preview project-card__preview--three" aria-hidden="true">
+                                <span class="project-card__index">PROJECT / 03</span>
+                                <span class="project-card__brand">IDEA<span>+</span></span>
+                                <span class="project-card__caption">BRAND IDENTITY</span>
+                            </div>
+                            <div class="project-card__info">
+                                <p class="eyebrow">03 / Visual Identity</p>
+                                <h3>Project 3</h3>
+                                <p>Description of your third project.</p>
+                            </div>
+                        </article>
+                        <article class="project-card" data-category="video" role="group" aria-roledescription="slide" aria-label="4 of 5" aria-hidden="true" inert>
+                            <div class="project-card__preview project-card__preview--four" aria-hidden="true">
+                                <span class="project-card__index">PROJECT / 04</span>
+                                <span class="project-card__play" aria-hidden="true">▶</span>
+                                <span class="project-card__timeline"><i></i><i></i><i></i><i></i></span>
+                                <span class="project-card__caption">VIDEO EDIT</span>
+                            </div>
+                            <div class="project-card__info">
+                                <p class="eyebrow">04 / Video Editing</p>
+                                <h3>Project 4</h3>
+                                <p>Description of your fourth project.</p>
+                            </div>
+                        </article>
+                        <article class="project-card" data-category="website" role="group" aria-roledescription="slide" aria-label="5 of 5" aria-hidden="true" inert>
+                            <div class="project-card__preview project-card__preview--five" aria-hidden="true">
+                                <span class="project-card__index">PROJECT / 05</span>
+                                <span class="project-card__browser"><i></i><i></i><i></i><b></b><b></b></span>
+                                <span class="project-card__caption">WEB DESIGN</span>
+                            </div>
+                            <div class="project-card__info">
+                                <p class="eyebrow">05 / Web Design</p>
+                                <h3>Project 5</h3>
+                                <p>Description of your fifth project.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="project-carousel__controls">
+                    <p class="project-carousel__status" aria-live="polite">01 <span>/</span> 05</p>
+                    <div class="project-carousel__pagination" aria-label="Choose a project"></div>
+                    <div class="project-carousel__arrows">
+                        <button class="project-carousel__arrow" type="button" data-direction="-1" aria-label="Previous project">←</button>
+                        <button class="project-carousel__arrow" type="button" data-direction="1" aria-label="Next project">→</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <hr>
-
-        <section id="contact">
-            <h2>Contact Me</h2>
-            <p>Email: yourname@email.com</p>
-            <p>Facebook: Your Facebook Link</p>
-            <p>GitHub: Your GitHub Link</p>
+        <section class="content-section" id="contact">
+            <p class="eyebrow">Let's connect</p>
+            <h2>Contact</h2>
+            <p>Email: <a href="mailto:janjayjil@gmail.com">janjayjil@gmail.com</a></p>
+            <p>Facebook: <a href="https://www.facebook.com/Prismalcs/" target="_blank" rel="noopener noreferrer">PrismaVL on Facebook</a></p>
+            <p>GitHub: <a href="https://github.com/PrismaVL" target="_blank" rel="noopener noreferrer">PrismaVL on GitHub</a></p>
         </section>
-
     </main>
 
-    <hr>
-
-    <footer>
-        <p>&copy; 2026 Your Name. All Rights Reserved.</p>
+    <footer class="site-footer">
+        <p>&copy; 2026 PrismaVL. All Rights Reserved.</p>
     </footer>
-
 </body>
 </html>
