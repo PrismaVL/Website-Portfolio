@@ -70,13 +70,13 @@ if (!prefersReducedMotion.matches) {
                 && absoluteDelta >= 80
                 && (absoluteDelta % 100 === 0 || absoluteDelta % 120 === 0));
         const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
-        scrollEase = isMouseWheel ? 150 : 100;
+        scrollEase = isMouseWheel ? 240 : 100;
 
         if (!scrollFrame) {
             targetScrollY = window.scrollY;
         }
 
-        targetScrollY = Math.max(0, Math.min(targetScrollY + delta * (isMouseWheel ? 0.75 : 1), maxScrollY));
+        targetScrollY = Math.max(0, Math.min(targetScrollY + delta * (isMouseWheel ? 0.5 : 1), maxScrollY));
         event.preventDefault();
 
         if (!scrollFrame) {
