@@ -5,7 +5,6 @@ if ("scrollRestoration" in history) {
 const intro = document.querySelector(".intro");
 
 if (intro) {
-    document.documentElement.classList.add("intro-active");
     intro.addEventListener("animationend", (event) => {
         if (event.animationName === "intro-dismiss") {
             document.documentElement.classList.remove("intro-active");
@@ -95,6 +94,12 @@ if (!prefersReducedMotion.matches) {
     }
 
     window.addEventListener("wheel", (event) => {
+        if (document.documentElement.classList.contains("intro-active")) {
+            event.preventDefault();
+            stopWheelScroll();
+            return;
+        }
+
         if (event.ctrlKey || !event.deltaY || !event.cancelable) {
             return;
         }
