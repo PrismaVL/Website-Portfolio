@@ -21,6 +21,67 @@ window.addEventListener("pageshow", () => {
     window.scrollTo(0, 0);
 });
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+if (!prefersReducedMotion.matches) {
+    let targetScrollY = window.scrollY;
+    let scrollFrame = 0;
+    let previousFrame = 0;
+
+    function stopWheelScroll() {
+        cancelAnimationFrame(scrollFrame);
+        scrollFrame = 0;
+        previousFrame = 0;
+        targetScrollY = window.scrollY;
+    }
+
+    function animateWheelScroll(timestamp) {
+        if (!previousFrame) {
+            previousFrame = timestamp;
+        }
+
+        const progress = 1 - Math.exp(-(timestamp - previousFrame) / 100);
+        previousFrame = timestamp;
+        const distance = targetScrollY - window.scrollY;
+
+        if (Math.abs(distance) < 1) {
+            window.scrollTo({ top: targetScrollY, behavior: "instant" });
+            scrollFrame = 0;
+            previousFrame = 0;
+            return;
+        }
+
+        window.scrollTo({ top: window.scrollY + distance * progress, behavior: "instant" });
+        scrollFrame = requestAnimationFrame(animateWheelScroll);
+    }
+
+    window.addEventListener("wheel", (event) => {
+        if (event.ctrlKey || !event.deltaY || !event.cancelable) {
+            return;
+        }
+
+        const delta = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
+            : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerHeight
+            : 1);
+        const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+
+        if (!scrollFrame) {
+            targetScrollY = window.scrollY;
+        }
+
+        targetScrollY = Math.max(0, Math.min(targetScrollY + delta, maxScrollY));
+        event.preventDefault();
+
+        if (!scrollFrame) {
+            scrollFrame = requestAnimationFrame(animateWheelScroll);
+        }
+    }, { passive: false });
+
+    window.addEventListener("pointerdown", stopWheelScroll, { passive: true });
+    window.addEventListener("touchstart", stopWheelScroll, { passive: true });
+    window.addEventListener("keydown", stopWheelScroll);
+}
+
 const scrollProgress = document.querySelector(".scroll-progress__fill");
 
 if (scrollProgress) {

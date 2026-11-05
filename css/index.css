@@ -32,7 +32,7 @@ html.intro-active body {
     top: 20px;
     right: 12px;
     bottom: 20px;
-    width: 6px;
+    width: 3px;
     overflow: hidden;
     border-radius: 999px;
     background: #3a3a3d;
@@ -45,9 +45,12 @@ html.intro-active .scroll-progress {
 
 .scroll-progress__fill {
     width: 100%;
-    height: var(--scroll-progress, 0%);
+    height: 100%;
     border-radius: inherit;
     background: var(--text);
+    transform: scaleY(var(--scroll-progress, 0));
+    transform-origin: top;
+    transition: transform 120ms linear;
 }
 
 body {
