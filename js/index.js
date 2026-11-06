@@ -32,10 +32,16 @@ if (!prefersReducedMotion.matches && "IntersectionObserver" in window) {
         });
     }, { rootMargin: "0px 0px -20% 0px", threshold: 0.01 });
 
+    const contactRevealTargets = [];
     document.querySelectorAll(".content-section").forEach((section) => {
         const revealTargets = [];
 
         Array.from(section.children).forEach((child) => {
+            if (section.id === "contact") {
+                contactRevealTargets.push(child);
+                return;
+            }
+
             if (child.classList.contains("stack-list")) {
                 child.querySelectorAll(".stack-group").forEach((group) => {
                     revealTargets.push(group.querySelector("h3"));
@@ -53,6 +59,20 @@ if (!prefersReducedMotion.matches && "IntersectionObserver" in window) {
             target.classList.add("scroll-reveal");
             revealObserver.observe(target);
         });
+    });
+
+    const contactRevealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.01 });
+
+    contactRevealTargets.forEach((target) => {
+        target.classList.add("scroll-reveal");
+        contactRevealObserver.observe(target);
     });
 }
 
