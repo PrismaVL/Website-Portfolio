@@ -307,3 +307,121 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
 
     updateCategory(activeCategory);
 });
+
+document.querySelectorAll(".certification-carousel").forEach((carousel) => {
+    const track = carousel.querySelector(".certification-carousel__track");
+    const slides = Array.from(track.children);
+    const pagination = carousel.querySelector(".certification-carousel__pagination");
+    const status = carousel.querySelector(".certification-carousel__status");
+    const arrows = Array.from(carousel.querySelectorAll(".certification-carousel__arrow"));
+    let visibleCount = Number.parseInt(
+        window.getComputedStyle(carousel).getPropertyValue("--certification-cards-visible"),
+        10
+    );
+    let pageCount = Math.ceil(slides.length / visibleCount);
+    let activePage = 0;
+    let dots = [];
+    const shouldAnimateCards = !prefersReducedMotion.matches && "IntersectionObserver" in window;
+    const viewedSlides = new Set();
+    let carouselIsVisible = false;
+
+    if (shouldAnimateCards) {
+        slides.forEach((slide) => slide.classList.add("certification-card--reveal"));
+    }
+
+    function revealVisibleSlides(firstVisibleIndex, lastVisibleIndex) {
+        if (!shouldAnimateCards || !carouselIsVisible) {
+            return;
+        }
+
+        slides.slice(firstVisibleIndex, lastVisibleIndex).forEach((slide, index) => {
+            if (viewedSlides.has(slide)) {
+                return;
+            }
+
+            viewedSlides.add(slide);
+            slide.style.setProperty("--certification-reveal-delay", `${index * 120}ms`);
+            requestAnimationFrame(() => slide.classList.add("is-revealed"));
+        });
+    }
+
+    function updatePage(page) {
+        activePage = (page + pageCount) % pageCount;
+        const firstVisibleIndex = activePage * visibleCount;
+        const lastVisibleIndex = Math.min(firstVisibleIndex + visibleCount, slides.length);
+        track.style.transform = `translateX(-${firstVisibleIndex / slides.length * 100}%)`;
+        status.textContent = `${String(firstVisibleIndex + 1).padStart(2, "0")}–${String(lastVisibleIndex).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+
+        slides.forEach((slide, slideIndex) => {
+            const isActive = slideIndex >= firstVisibleIndex && slideIndex < lastVisibleIndex;
+            slide.setAttribute("aria-label", `${slideIndex + 1} of ${slides.length}`);
+            slide.setAttribute("aria-hidden", String(!isActive));
+            slide.toggleAttribute("inert", !isActive);
+        });
+
+        dots.forEach((dot, dotIndex) => {
+            dot.setAttribute("aria-current", String(dotIndex === activePage));
+        });
+
+        revealVisibleSlides(firstVisibleIndex, lastVisibleIndex);
+    }
+
+    function renderPagination() {
+        pagination.replaceChildren();
+        dots = Array.from({ length: pageCount }, (_, index) => {
+            const button = document.createElement("button");
+            button.className = "certification-carousel__dot";
+            button.type = "button";
+            button.setAttribute("aria-label", `Show certifications ${index * visibleCount + 1} to ${Math.min((index + 1) * visibleCount, slides.length)}`);
+            button.addEventListener("click", () => updatePage(index));
+            pagination.append(button);
+            return button;
+        });
+    }
+
+    renderPagination();
+
+    if (shouldAnimateCards) {
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+            carouselIsVisible = entry.isIntersecting;
+            if (carouselIsVisible) {
+                const firstVisibleIndex = activePage * visibleCount;
+                revealVisibleSlides(
+                    firstVisibleIndex,
+                    Math.min(firstVisibleIndex + visibleCount, slides.length)
+                );
+            }
+        }, { rootMargin: "0px 0px -20% 0px", threshold: 0.01 });
+        visibilityObserver.observe(carousel);
+    }
+
+    arrows.forEach((button) => {
+        button.addEventListener("click", () => {
+            updatePage(activePage + Number(button.dataset.direction));
+        });
+    });
+
+    carousel.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            event.preventDefault();
+            updatePage(activePage + (event.key === "ArrowRight" ? 1 : -1));
+        }
+    });
+
+    updatePage(activePage);
+
+    window.addEventListener("resize", () => {
+        const nextVisibleCount = Number.parseInt(
+            window.getComputedStyle(carousel).getPropertyValue("--certification-cards-visible"),
+            10
+        );
+
+        if (nextVisibleCount !== visibleCount) {
+            visibleCount = nextVisibleCount;
+            pageCount = Math.ceil(slides.length / visibleCount);
+            activePage = Math.min(activePage, pageCount - 1);
+            renderPagination();
+            updatePage(activePage);
+        }
+    });
+});
