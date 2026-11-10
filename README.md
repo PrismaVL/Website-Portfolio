@@ -1,4 +1,4 @@
-# PrismaVL — Portfolio
+# Prisma — Portfolio
 
 A personal portfolio of Jaymard T. Licas, showcasing UI/UX design, web and mobile projects, video edits, technical skills, and certifications.
 
