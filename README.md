@@ -25,16 +25,15 @@ or
 
 ## Project structure
 
-```text
 .
-├── assets/       # Images, logos, screenshots, and certification graphics
+├── assets/  # Images, logos, screenshots, and certifications
 ├── css/
 │   └── index.css
 ├── js/
 │   └── index.js
 └── index.html
-```
+
 
 ## Video embeds
 
-Videos are embedded from Google Drive.
+Videos are embedded from a Google Drive.
