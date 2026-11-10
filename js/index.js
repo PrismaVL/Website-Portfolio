@@ -50,6 +50,11 @@ if (!prefersReducedMotion.matches && "IntersectionObserver" in window) {
                         revealTargets.push(item);
                     });
                 });
+            } else if (child.classList.contains("project-carousel")) {
+                revealTargets.push(child);
+                child.querySelectorAll(".project-card__preview--image").forEach((preview) => {
+                    revealTargets.push(preview);
+                });
             } else {
                 revealTargets.push(child);
             }
@@ -253,6 +258,7 @@ if (scrollProgress) {
 
 document.querySelectorAll(".project-carousel").forEach((carousel) => {
     const track = carousel.querySelector(".project-carousel__track");
+    const viewport = carousel.querySelector(".project-carousel__viewport");
     const slides = Array.from(track.children);
     const pagination = carousel.querySelector(".project-carousel__pagination");
     const status = carousel.querySelector(".project-carousel__status");
@@ -261,6 +267,7 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     let visibleSlides = slides;
     let activeIndex = 0;
     let dots = [];
+    let viewportAnimation;
 
     function updateSlide(index) {
         activeIndex = (index + visibleSlides.length) % visibleSlides.length;
@@ -277,7 +284,14 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     }
 
     function updateCategory(category) {
+        if (viewportAnimation) {
+            viewportAnimation.cancel();
+            viewportAnimation = null;
+        }
+        viewport.style.height = "";
+        const previousHeight = viewport.getBoundingClientRect().height;
         activeCategory = category;
+        carousel.dataset.activeCategory = category;
         visibleSlides = slides.filter((slide) => (
             category === "all" || slide.dataset.category === category
         ));
@@ -306,6 +320,21 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
         });
 
         updateSlide(activeIndex);
+
+        const nextHeight = viewport.getBoundingClientRect().height;
+        if (prefersReducedMotion.matches || Math.abs(nextHeight - previousHeight) < 1) {
+            return;
+        }
+
+        viewport.style.height = `${previousHeight}px`;
+        viewportAnimation = viewport.animate(
+            [{ height: `${previousHeight}px` }, { height: `${nextHeight}px` }],
+            { duration: 450, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+        viewportAnimation.onfinish = () => {
+            viewport.style.height = "";
+            viewportAnimation = null;
+        };
     }
 
     filters.forEach((filter) => {
@@ -320,12 +349,37 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
 
     carousel.addEventListener("keydown", (event) => {
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            if (event.target.closest(".project-card__gallery")) {
+                return;
+            }
             event.preventDefault();
             updateSlide(activeIndex + (event.key === "ArrowRight" ? 1 : -1));
         }
     });
 
     updateCategory(activeCategory);
+});
+
+document.querySelectorAll(".project-card__gallery").forEach((gallery) => {
+    const card = gallery.closest(".project-card");
+    const preview = card.querySelector(".project-card__image");
+    const thumbnails = Array.from(gallery.querySelectorAll(".project-card__thumbnail"));
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", () => {
+            if (preview.getAttribute("src") === thumbnail.dataset.previewImage) {
+                return;
+            }
+
+            preview.classList.remove("project-card__image--changing");
+            void preview.offsetWidth;
+            preview.src = thumbnail.dataset.previewImage;
+            preview.classList.add("project-card__image--changing");
+            thumbnails.forEach((item) => {
+                item.setAttribute("aria-pressed", String(item === thumbnail));
+            });
+        });
+    });
 });
 
 document.querySelectorAll(".certification-carousel").forEach((carousel) => {
