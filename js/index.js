@@ -262,14 +262,100 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     const slides = Array.from(track.children);
     const pagination = carousel.querySelector(".project-carousel__pagination");
     const status = carousel.querySelector(".project-carousel__status");
+    const filterGroup = carousel.querySelector(".project-carousel__filters");
     const filters = Array.from(carousel.querySelectorAll(".project-carousel__filter"));
+    const videos = Array.from(carousel.querySelectorAll(".project-card__video"));
+    videos.forEach((video) => {
+        video.dataset.videoSrc = video.getAttribute("src");
+        video.setAttribute("src", "about:blank");
+    });
     let activeCategory = "all";
     let visibleSlides = slides;
     let activeIndex = 0;
     let dots = [];
     let viewportAnimation;
+    let sectionScrollFrame;
 
-    function updateSlide(index) {
+    function scrollFiltersIntoPosition(targetTop) {
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+
+        const start = window.scrollY;
+        const end = Math.max(0, Math.min(
+            start + filterGroup.getBoundingClientRect().top - targetTop,
+            document.documentElement.scrollHeight - window.innerHeight
+        ));
+
+        if (prefersReducedMotion.matches || Math.abs(end - start) < 1) {
+            window.scrollTo({ top: end, behavior: "instant" });
+            return;
+        }
+
+        const duration = 600;
+        let animationStart;
+
+        function animateScroll(timestamp) {
+            if (animationStart === undefined) {
+                animationStart = timestamp;
+            }
+
+            const progress = Math.min((timestamp - animationStart) / duration, 1);
+            const easedProgress = 1 - (1 - progress) ** 3;
+            window.scrollTo({
+                top: start + (end - start) * easedProgress,
+                behavior: "instant"
+            });
+
+            if (progress < 1) {
+                sectionScrollFrame = requestAnimationFrame(animateScroll);
+            } else {
+                sectionScrollFrame = 0;
+            }
+        }
+
+        sectionScrollFrame = requestAnimationFrame(animateScroll);
+    }
+
+    window.addEventListener("wheel", () => {
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+    }, { passive: true });
+    window.addEventListener("touchstart", () => {
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+    }, { passive: true });
+
+    function updateViewportHeight(animate = true) {
+        if (animate) {
+            const targetTop = Math.min(165, window.innerHeight * 0.35);
+            scrollFiltersIntoPosition(targetTop);
+        }
+
+        const currentHeight = viewport.getBoundingClientRect().height;
+        if (viewportAnimation) {
+            viewportAnimation.cancel();
+            viewportAnimation = null;
+        }
+
+        const targetHeight = visibleSlides[activeIndex].getBoundingClientRect().height;
+        viewport.style.height = `${currentHeight}px`;
+
+        if (!animate || prefersReducedMotion.matches || Math.abs(targetHeight - currentHeight) < 1) {
+            viewport.style.height = `${targetHeight}px`;
+            return;
+        }
+
+        viewportAnimation = viewport.animate(
+            [{ height: `${currentHeight}px` }, { height: `${targetHeight}px` }],
+            { duration: 450, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+        viewportAnimation.onfinish = () => {
+            viewport.style.height = `${targetHeight}px`;
+            viewportAnimation = null;
+        };
+    }
+
+    function updateSlide(index, animateHeight = true) {
         activeIndex = (index + visibleSlides.length) % visibleSlides.length;
         track.style.transform = `translateX(-${activeIndex * 100}%)`;
         status.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(visibleSlides.length).padStart(2, "0")}`;
@@ -281,15 +367,23 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
             slide.toggleAttribute("inert", !isActive);
             dots[slideIndex].setAttribute("aria-current", String(isActive));
         });
+
+        updateViewportHeight(animateHeight);
+
+        slides.forEach((slide) => {
+            const video = slide.querySelector(".project-card__video");
+            if (!video) {
+                return;
+            }
+
+            const source = slide === visibleSlides[activeIndex] ? video.dataset.videoSrc : "about:blank";
+            if (video.getAttribute("src") !== source) {
+                video.setAttribute("src", source);
+            }
+        });
     }
 
-    function updateCategory(category) {
-        if (viewportAnimation) {
-            viewportAnimation.cancel();
-            viewportAnimation = null;
-        }
-        viewport.style.height = "";
-        const previousHeight = viewport.getBoundingClientRect().height;
+    function updateCategory(category, animateHeight = true) {
         activeCategory = category;
         carousel.dataset.activeCategory = category;
         visibleSlides = slides.filter((slide) => (
@@ -319,22 +413,7 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
             return button;
         });
 
-        updateSlide(activeIndex);
-
-        const nextHeight = viewport.getBoundingClientRect().height;
-        if (prefersReducedMotion.matches || Math.abs(nextHeight - previousHeight) < 1) {
-            return;
-        }
-
-        viewport.style.height = `${previousHeight}px`;
-        viewportAnimation = viewport.animate(
-            [{ height: `${previousHeight}px` }, { height: `${nextHeight}px` }],
-            { duration: 450, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
-        );
-        viewportAnimation.onfinish = () => {
-            viewport.style.height = "";
-            viewportAnimation = null;
-        };
+        updateSlide(activeIndex, animateHeight);
     }
 
     filters.forEach((filter) => {
@@ -357,7 +436,8 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
         }
     });
 
-    updateCategory(activeCategory);
+    updateCategory(activeCategory, false);
+    window.addEventListener("resize", () => updateViewportHeight(false));
 });
 
 document.querySelectorAll(".project-card__gallery").forEach((gallery) => {

@@ -578,6 +578,7 @@ nav a:focus-visible {
 
 .project-carousel__track {
     display: flex;
+    align-items: flex-start;
     width: 100%;
     transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -626,9 +627,28 @@ nav a:focus-visible {
     aspect-ratio: 2 / 1;
 }
 
+.project-card__preview--video {
+    display: block;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+}
+
+.project-card__preview.project-card__preview--video::before,
+.project-card__preview.project-card__preview--video::after {
+    content: none;
+}
+
+.project-card__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
 .project-card__preview--mobile {
-    width: min(100%, 270px);
-    max-height: 560px;
+    width: min(100%, 270px, calc((100vh - 260px) * 0.48));
+    max-height: min(560px, calc(100vh - 260px));
     aspect-ratio: 0.48;
     justify-self: center;
 }
@@ -639,7 +659,7 @@ nav a:focus-visible {
 }
 
 .project-card__preview--mobile .project-card__image {
-    object-fit: cover;
+    object-fit: contain;
     object-position: center 40%;
 }
 
@@ -1312,8 +1332,8 @@ nav a:focus-visible {
     }
 
     .project-card__preview--mobile {
-        width: min(58vw, 220px);
-        max-height: 440px;
+        width: min(58vw, 220px, calc((100vh - 260px) * 0.48));
+        max-height: min(440px, calc(100vh - 260px));
         aspect-ratio: 0.48;
     }
 
