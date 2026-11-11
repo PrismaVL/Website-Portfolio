@@ -1,0 +1,5 @@
+.layout-wireframe #contact a {
+    text-decoration-thickness: 1px;
+    text-decoration-style: dashed;
+    text-underline-offset: 0.2em;
+}

@@ -1,0 +1,8 @@
+.layout-wireframe .project-carousel__filters,
+.layout-wireframe .project-carousel__controls {
+    border-color: var(--line);
+}
+
+.layout-wireframe .project-card__info {
+    border-inline: 1px dashed var(--line);
+}

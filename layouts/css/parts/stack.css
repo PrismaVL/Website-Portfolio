@@ -1,0 +1,7 @@
+.layout-wireframe .stack-group {
+    padding: 1rem;
+}
+
+.layout-wireframe .stack-items li {
+    border: 1px dashed transparent;
+}

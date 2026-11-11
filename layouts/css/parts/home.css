@@ -1,0 +1,12 @@
+.layout-wireframe .hero__visual {
+    outline: 1px dashed var(--line);
+    outline-offset: 8px;
+}
+
+.layout-wireframe .hero__visual--placeholder {
+    width: 100%;
+}
+
+.layout-wireframe .hero__details > div {
+    border-top: 1px dashed var(--line);
+}

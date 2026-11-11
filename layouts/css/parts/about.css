@@ -1,0 +1,5 @@
+.layout-wireframe #about > p:last-child {
+    max-width: 70ch;
+    padding: 1rem;
+    border: 1px dashed var(--line);
+}

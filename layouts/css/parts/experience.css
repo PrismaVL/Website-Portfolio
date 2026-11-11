@@ -1,0 +1,7 @@
+.layout-wireframe .experience-company__content {
+    padding: 1rem;
+}
+
+.layout-wireframe .experience-tags li {
+    border: 1px dashed var(--line);
+}

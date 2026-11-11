@@ -1,0 +1,144 @@
+:root {
+    color-scheme: light;
+    --page: #f2f2ef;
+    --surface: #e8e8e4;
+    --text: #20201f;
+    --muted: #696966;
+    --accent: #888884;
+    --line: rgba(32, 32, 31, 0.3);
+}
+
+body.layout-wireframe {
+    background-color: var(--page);
+    background-image:
+        linear-gradient(rgba(32, 32, 31, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(32, 32, 31, 0.025) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.layout-wireframe .site-header,
+.layout-wireframe .content-section,
+.layout-wireframe .site-footer {
+    border-color: var(--line);
+}
+
+.layout-wireframe .hero__visual,
+.layout-wireframe .project-card__preview,
+.layout-wireframe .certification-card,
+.layout-wireframe .experience-company__content,
+.layout-wireframe .stack-group {
+    border: 1px dashed var(--line);
+    background: rgba(255, 255, 255, 0.42);
+}
+
+.layout-wireframe .stack-items img,
+.layout-wireframe .certification-card__badge,
+.layout-wireframe .project-card__video {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.layout-wireframe .project-card__preview--image,
+.layout-wireframe .project-card__preview--video,
+.layout-wireframe .certification-card__badge {
+    outline: 1px dashed rgba(32, 32, 31, 0.35);
+    outline-offset: -6px;
+}
+
+.layout-wireframe .project-card__thumbnail,
+.layout-wireframe .project-carousel__filter,
+.layout-wireframe .project-carousel__arrow,
+.layout-wireframe .certification-carousel__arrow,
+.layout-wireframe .certification-card__verify,
+.layout-wireframe .certification-all-link {
+    border-color: var(--line);
+}
+
+.layout-wireframe .project-carousel__filter[aria-pressed="true"],
+.layout-wireframe .project-carousel__dot[aria-current="true"],
+.layout-wireframe .certification-carousel__dot[aria-current="true"] {
+    background: #d3d3cf;
+}
+
+.layout-wireframe .project-card__caption,
+.layout-wireframe .project-card__index {
+    color: var(--text);
+}
+
+.layout-wireframe .hero__visual--placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 430px;
+    border: 1px dashed var(--line);
+    background:
+        linear-gradient(135deg, transparent 49.8%, var(--line) 50%, transparent 50.2%),
+        linear-gradient(45deg, transparent 49.8%, var(--line) 50%, transparent 50.2%),
+        var(--surface);
+    color: var(--muted);
+    font: 700 0.7rem/1.4 "Courier New", monospace;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.layout-wireframe .project-card__placeholder {
+    position: absolute;
+    inset: 12px;
+    display: grid;
+    place-items: center;
+    border: 1px dashed var(--line);
+    background:
+        linear-gradient(90deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
+        linear-gradient(transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
+        repeating-linear-gradient(0deg, transparent 0 23px, rgba(32, 32, 31, 0.07) 24px),
+        var(--surface);
+    color: var(--muted);
+    font: 700 0.7rem/1.4 "Courier New", monospace;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.layout-wireframe .project-card__thumbnail-swatch {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    place-items: center;
+    border: 1px dashed var(--line);
+    background: var(--surface);
+    color: var(--muted);
+    font: 700 0.65rem "Courier New", monospace;
+}
+
+.wireframe-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 450ms ease, transform 450ms ease;
+}
+
+.wireframe-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.site-header nav a[aria-current="location"] {
+    color: var(--text);
+}
+
+.layout-error {
+    position: fixed;
+    z-index: 40;
+    inset: 1rem 1rem auto;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    background: var(--page);
+    color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wireframe-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

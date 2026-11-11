@@ -11,6 +11,10 @@ A personal portfolio of Jaymard T. Licas, showcasing UI/UX design, web and mobil
 - Certifications section and contact links
 - Smooth scrolling and reduced-motion support
 
+## Wireframe layout
+
+The matching wireframe version is in [`layouts/index.html`](./layouts/index.html). It is split into HTML, CSS, and JavaScript files for each page part and uses generic project content and media placeholders. Open it through XAMPP or another local web server because it loads its HTML parts dynamically.
+
 ## Run locally
 
 This is a static website with no build step or package installation required.

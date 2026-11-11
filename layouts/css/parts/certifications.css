@@ -1,0 +1,7 @@
+.layout-wireframe .certification-card {
+    padding: 1rem;
+}
+
+.layout-wireframe .certification-card__verify {
+    border-style: dashed;
+}
