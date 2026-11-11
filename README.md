@@ -27,16 +27,6 @@ or
 1. Open browser
 2. enter URL https://prismavl.github.io/Website-Portfolio/
 
-## Project structure
-
-.
-├── assets/  # Images, logos, screenshots, and certifications
-├── css/
-│   └── index.css
-├── js/
-│   └── index.js
-└── index.html
-
 
 ## Video embeds
 
