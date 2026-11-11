@@ -50,9 +50,6 @@ try {
 
     const portfolioScript = document.createElement("script");
     portfolioScript.src = "../js/index.js";
-    portfolioScript.onload = () => {
-        document.documentElement.classList.remove("intro-active");
-    };
     portfolioScript.onerror = () => {
         showLoadError(new Error("Unable to load the portfolio interactions."));
     };

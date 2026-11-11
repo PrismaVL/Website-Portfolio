@@ -17,7 +17,6 @@ export function init(root) {
             thumbnail.addEventListener("click", () => {
                 const screen = thumbnail.dataset.previewImage;
                 placeholder.dataset.screen = screen;
-                placeholder.textContent = `${card.querySelector("h3").textContent} · ${screen}`;
                 placeholder.classList.remove("project-card__image--changing");
                 void placeholder.offsetWidth;
                 placeholder.classList.add("project-card__image--changing");

@@ -70,44 +70,23 @@ body.layout-wireframe {
     place-items: center;
     min-height: 430px;
     border: 1px dashed var(--line);
-    background:
-        linear-gradient(135deg, transparent 49.8%, var(--line) 50%, transparent 50.2%),
-        linear-gradient(45deg, transparent 49.8%, var(--line) 50%, transparent 50.2%),
-        var(--surface);
-    color: var(--muted);
-    font: 700 0.7rem/1.4 "Courier New", monospace;
-    letter-spacing: 0.14em;
-    text-align: center;
-    text-transform: uppercase;
+    background: var(--surface);
 }
 
 .layout-wireframe .project-card__placeholder {
     position: absolute;
     inset: 12px;
-    display: grid;
-    place-items: center;
     border: 1px dashed var(--line);
     background:
-        linear-gradient(90deg, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
-        linear-gradient(transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
         repeating-linear-gradient(0deg, transparent 0 23px, rgba(32, 32, 31, 0.07) 24px),
         var(--surface);
-    color: var(--muted);
-    font: 700 0.7rem/1.4 "Courier New", monospace;
-    letter-spacing: 0.14em;
-    text-align: center;
-    text-transform: uppercase;
 }
 
 .layout-wireframe .project-card__thumbnail-swatch {
-    display: grid;
     width: 100%;
     aspect-ratio: 16 / 9;
-    place-items: center;
     border: 1px dashed var(--line);
     background: var(--surface);
-    color: var(--muted);
-    font: 700 0.65rem "Courier New", monospace;
 }
 
 .wireframe-reveal {
