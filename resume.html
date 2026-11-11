@@ -26,11 +26,13 @@
         }
 
         .resume {
-            width: min(100%, 850px);
+            width: min(100%, 8.5in);
+            height: 11in;
             margin: 0 auto;
             padding: 48px 54px;
             background: #fff;
             box-shadow: 0 8px 32px rgb(22 28 35 / 12%);
+            text-align: justify;
         }
 
         .resume__header {
@@ -64,7 +66,7 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            font-size: 11px;
+            font-size: 12px;
             line-height: 1.4;
         }
 
@@ -77,6 +79,7 @@
             display: block;
             width: 120px;
             height: 120px;
+            border: 2px solid #343434;
             object-fit: cover;
             object-position: center 35%;
         }
@@ -88,7 +91,7 @@
 
         .section-title {
             margin: 0 0 10px;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.2;
             letter-spacing: .45px;
             text-transform: uppercase;
@@ -97,8 +100,8 @@
         .summary p,
         .entry p {
             margin: 0;
-            font-size: 10px;
-            line-height: 1.55;
+            font-size: 11px;
+            line-height: 1.5;
         }
 
         .resume__columns {
@@ -122,24 +125,24 @@
             gap: 12px;
             align-items: baseline;
             margin: 0 0 4px;
-            font-size: 10px;
+            font-size: 11px;
             line-height: 1.4;
         }
 
         .entry__heading strong {
-            font-size: 10.5px;
+            font-size: 11.5px;
         }
 
         .entry__date {
             flex: 0 0 auto;
-            font-size: 9px;
+            font-size: 10px;
             color: #525252;
             text-align: right;
         }
 
         .entry__subheading {
             margin: 0 0 4px;
-            font-size: 9.5px;
+            font-size: 10.5px;
             line-height: 1.4;
         }
 
@@ -153,7 +156,7 @@
         .cert-list {
             margin: 6px 0 0;
             padding-left: 15px;
-            font-size: 9.5px;
+            font-size: 10.5px;
             line-height: 1.5;
         }
 
@@ -163,7 +166,7 @@
 
         .skills-group h3 {
             margin: 0 0 3px;
-            font-size: 10px;
+            font-size: 11px;
         }
 
         .skills-list {
@@ -172,12 +175,12 @@
 
         .cert-list {
             padding-left: 13px;
-            font-size: 8.6px;
-            line-height: 1.45;
+            font-size: 9.5px;
+            line-height: 1.5;
         }
 
         .organization {
-            font-size: 9.5px;
+            font-size: 10.5px;
             line-height: 1.5;
         }
 
@@ -212,6 +215,7 @@
             }
 
             .resume {
+                height: auto;
                 padding: 30px 24px;
             }
 
@@ -236,8 +240,8 @@
         }
 
         @page {
-            size: A4;
-            margin: 12mm;
+            size: 8.5in 11in;
+            margin: 0;
         }
 
         @media print {
@@ -252,10 +256,11 @@
             }
 
             .resume {
-                width: 100%;
+                width: 8.5in;
+                height: 11in;
                 max-width: none;
                 margin: 0;
-                padding: 0;
+                padding: 0.5in;
                 box-shadow: none;
             }
 
@@ -352,6 +357,32 @@ professional technology environment.</p>
             </div>
 
             <div>
+                <section class="section" aria-labelledby="work-experience-title">
+                    <h2 class="section-title" id="work-experience-title">Work Experience</h2>
+                    <article class="entry">
+                        <h3 class="entry__heading">
+                            <strong>Freelance Video Editor</strong>
+                            <time class="entry__date" datetime="2022-01">Jan 2022 – Present</time>
+                        </h3>
+                        <p class="entry__subheading">Self-Employed</p>
+                        <ul class="bullet-list">
+                            <li>Edited promotional videos, corporate content, and social media campaigns for various clients.</li>
+                            <li>Collaborated with clients to ensure the final product met project expectations.</li>
+                        </ul>
+                    </article>
+                    <article class="entry">
+                        <h3 class="entry__heading">
+                            <strong>Junior Video Editor</strong>
+                            <time class="entry__date" datetime="2020-01">Jan 2020 – Dec 2021</time>
+                        </h3>
+                        <p class="entry__subheading">Creative Media</p>
+                        <ul class="bullet-list">
+                            <li>Assisted in editing video content for advertising campaigns and brand promotions.</li>
+                            <li>Prepared raw footage for editing and managed post-production tasks such as color correction and audio mixing.</li>
+                        </ul>
+                    </article>
+                </section>
+
                 <section class="section" aria-labelledby="experience-title">
                     <h2 class="section-title" id="experience-title">Project Experience</h2>
                     <article class="entry">
