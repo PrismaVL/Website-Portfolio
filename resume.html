@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f1f3f5">
+    <meta name="theme-color" content="#f4f4f4">
     <meta name="description" content="Resume of Jaymard T. Licas, UI/UX Designer and Information Technology student.">
     <title>Jaymard T. Licas - Resume</title>
     <style>
         :root {
             color-scheme: light;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #242424;
-            background: #eef0f2;
+            font-family: "Times New Roman", Times, serif;
+            color: #171717;
+            background: #f0f0f0;
             font-synthesis: none;
             text-rendering: optimizeLegibility;
         }
@@ -27,47 +27,55 @@
 
         .resume {
             width: min(100%, 8.5in);
-            height: 11in;
+            min-height: 11in;
             margin: 0 auto;
-            padding: 48px 54px;
+            padding: 0.55in 0.62in;
             background: #fff;
             box-shadow: 0 8px 32px rgb(22 28 35 / 12%);
             text-align: justify;
         }
 
         .resume__header {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 120px;
-            gap: 28px;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #343434;
+            margin-bottom: 19px;
+            text-align: center;
         }
 
         .resume__name {
             margin: 0;
-            font-size: clamp(28px, 5vw, 38px);
-            line-height: 1;
-            letter-spacing: -1.4px;
+            font-size: clamp(20px, 3.8vw, 24px);
+            line-height: 1.1;
+            letter-spacing: .2px;
             text-transform: uppercase;
         }
 
         .resume__role {
-            margin: 8px 0 15px;
-            font-size: 15px;
+            margin: 4px 0 7px;
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
         .contact-list {
-            display: grid;
-            gap: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2px 8px;
             margin: 0;
             padding: 0;
             list-style: none;
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 10.5px;
+            line-height: 1.35;
+        }
+
+        .contact-list li + li::before {
+            content: "|";
+            margin-right: 8px;
+        }
+
+        .reference a {
+            color: inherit;
+            text-decoration: none;
         }
 
         .contact-list a {
@@ -75,48 +83,86 @@
             text-decoration: none;
         }
 
-        .resume__photo {
-            display: block;
-            width: 120px;
-            height: 120px;
-            border: 2px solid #343434;
-            object-fit: cover;
-            object-position: center 35%;
+        .contact-list a.contact-list__profile {
+            color: #0563c1;
+            text-decoration: underline;
         }
 
-        .summary {
-            padding: 15px 0 17px;
-            border-bottom: 1px solid #777;
+        .contact-list__copy {
+            border: 0;
+            padding: 0;
+            color: inherit;
+            background: none;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .contact-list__copy:focus-visible {
+            outline: 2px solid #0563c1;
+            outline-offset: 2px;
+        }
+
+        .contact-copy-status {
+            position: fixed;
+            z-index: 1000;
+            right: 16px;
+            bottom: 24px;
+            left: 16px;
+            width: fit-content;
+            max-width: calc(100vw - 32px);
+            margin: 0 auto;
+            border: 1px solid rgb(255 255 255 / 24%);
+            border-radius: 999px;
+            padding: 10px 18px;
+            color: #fff;
+            background: rgb(36 36 36 / 82%);
+            font-size: 12px;
+            line-height: 1.35;
+            text-align: center;
+            box-shadow: 0 6px 20px rgb(0 0 0 / 20%);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .contact-copy-status.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-copy-status[data-state="error"] {
+            background: rgb(160 35 35 / 88%);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .contact-copy-status {
+                transition: none;
+            }
+        }
+
+        .section {
+            margin-top: 12px;
         }
 
         .section-title {
-            margin: 0 0 10px;
-            font-size: 14px;
+            margin: 0 0 6px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #333;
+            font-size: 13px;
             line-height: 1.2;
-            letter-spacing: .45px;
             text-transform: uppercase;
         }
 
         .summary p,
         .entry p {
             margin: 0;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .resume__columns {
-            display: grid;
-            grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-            gap: 34px;
-            padding-top: 17px;
-        }
-
-        .section + .section {
-            margin-top: 20px;
+            font-size: 11.5px;
+            line-height: 1.35;
         }
 
         .entry + .entry {
-            margin-top: 14px;
+            margin-top: 10px;
         }
 
         .entry__heading {
@@ -124,69 +170,92 @@
             justify-content: space-between;
             gap: 12px;
             align-items: baseline;
-            margin: 0 0 4px;
-            font-size: 11px;
-            line-height: 1.4;
+            margin: 0;
+            font-size: 10.5px;
+            line-height: 1.35;
         }
 
         .entry__heading strong {
-            font-size: 11.5px;
+            font-size: 11px;
+        }
+
+        .entry__heading a {
+            color: inherit;
+            text-decoration: none;
         }
 
         .entry__date {
             flex: 0 0 auto;
             font-size: 10px;
-            color: #525252;
             text-align: right;
         }
 
         .entry__subheading {
-            margin: 0 0 4px;
-            font-size: 10.5px;
-            line-height: 1.4;
+            margin: 0 0 2px !important;
+            font-size: 11.5px !important;
+            line-height: 1.3 !important;
         }
 
         .entry__meta {
-            color: #505050;
-            font-style: italic;
+            color: #444;
         }
 
-        .bullet-list,
-        .skills-list,
-        .cert-list {
-            margin: 6px 0 0;
-            padding-left: 15px;
-            font-size: 10.5px;
-            line-height: 1.5;
-        }
-
-        .skills-group + .skills-group {
-            margin-top: 9px;
-        }
-
-        .skills-group h3 {
-            margin: 0 0 3px;
-            font-size: 11px;
-        }
-
-        .skills-list {
-            margin-top: 0;
+        .bullet-list {
+            margin: 3px 0 0;
+            padding-left: 17px;
+            font-size: 11.5px;
+            line-height: 1.35;
         }
 
         .cert-list {
-            padding-left: 13px;
-            font-size: 9.5px;
-            line-height: 1.5;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 24px;
+            row-gap: 3px;
+            margin: 3px 0 0;
+            padding-left: 17px;
+            font-size: 11.5px;
+            line-height: 1.35;
         }
 
-        .organization {
-            font-size: 10.5px;
-            line-height: 1.5;
+        .cert-list a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .additional-details p {
+            margin: 0;
+            font-size: 11.5px;
+            line-height: 1.4;
+        }
+
+        .organization,
+        .reference {
+            font-size: 11.5px;
+            line-height: 1.4;
         }
 
         .organization strong {
-            display: block;
-            margin-bottom: 2px;
+            margin-right: 5px;
+        }
+
+        .organization a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .reference {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 10px;
+            text-align: left;
+        }
+
+        .reference span::before,
+        .reference a::before,
+        .reference .contact-list__copy::before {
+            content: "|";
+            margin-right: 10px;
         }
 
         .print-button {
@@ -199,7 +268,7 @@
             color: #fff;
             background: #242424;
             font: inherit;
-            font-size: 13px;
+            font-size: 12.5px;
             cursor: pointer;
             box-shadow: 0 3px 12px rgb(0 0 0 / 20%);
         }
@@ -215,33 +284,22 @@
             }
 
             .resume {
-                height: auto;
+                min-height: 100vh;
                 padding: 30px 24px;
             }
 
-            .resume__header {
-                grid-template-columns: minmax(0, 1fr) 82px;
-                gap: 16px;
+            .entry__heading {
+                gap: 8px;
             }
 
-            .resume__photo {
-                width: 82px;
-                height: 92px;
-            }
-
-            .resume__columns {
+            .cert-list {
                 grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-            .resume__columns > div + div {
-                margin-top: 20px;
             }
         }
 
         @page {
-            size: 8.5in 11in;
-            margin: 0;
+            size: letter;
+            margin: 0.5in;
         }
 
         @media print {
@@ -256,15 +314,18 @@
             }
 
             .resume {
-                width: 8.5in;
-                height: 11in;
-                max-width: none;
+                width: auto;
+                min-height: 0;
                 margin: 0;
-                padding: 0.5in;
+                padding: 0;
                 box-shadow: none;
             }
 
             .print-button {
+                display: none;
+            }
+
+            .contact-copy-status {
                 display: none;
             }
 
@@ -278,16 +339,16 @@
 <body>
     <main class="resume">
         <header class="resume__header">
-            <div>
-                <h1 class="resume__name">Jaymard T. Licas</h1>
-                <p class="resume__role">UI/UX Designer</p>
-                <ul class="contact-list" aria-label="Contact information">
-                    <li>785-0 Oreta Compound, Nueve De Pebrero St., Mandaluyong City</li>
-                    <li><a href="tel:+639667036922">0966 703 6922</a></li>
-                    <li><a href="mailto:janjayjil@gmail.com">janjayjil@gmail.com</a></li>
-                </ul>
-            </div>
-            <img class="resume__photo" src="assets/face/1X1%20PICTURE.jpg" alt="Portrait of Jaymard T. Licas">
+            <h1 class="resume__name">Jaymard T. Licas</h1>
+            <ul class="contact-list" aria-label="Contact information">
+                <li>Mandaluyong City, Philippines</li>
+                <li><button class="contact-list__copy" type="button" data-copy-text="janjayjil@gmail.com" data-copy-label="Email">janjayjil@gmail.com</button></li>
+                <li><button class="contact-list__copy" type="button" data-copy-text="+63 966 703 6922" data-copy-label="Phone number">+63 966 703 6922</button></li>
+                <li><a class="contact-list__profile" href="https://www.linkedin.com/in/jaymard-licas-16011b33a/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                <li><a class="contact-list__profile" href="https://github.com/PrismaVL" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a class="contact-list__profile" href="https://websiteportfolio-neon.vercel.app/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+            </ul>
+            <p class="contact-copy-status" id="contact-copy-status" role="status" aria-live="polite"></p>
         </header>
 
         <section class="summary section" aria-labelledby="summary-title">
@@ -300,117 +361,142 @@ Eager to apply technical and problem-solving skills to real-world software proje
 professional technology environment.</p>
         </section>
 
-        <div class="resume__columns">
-            <div>
-                <section class="section" aria-labelledby="education-title">
-                    <h2 class="section-title" id="education-title">Education</h2>
-                    <article class="entry">
-                        <h3 class="entry__heading"><strong>FEU Institute of Technology</strong></h3>
-                        <p class="entry__subheading">Sampaloc, Manila</p>
-                        <p>Bachelor of Science in Information Technology, Specialization in Web and Mobile Application Development</p>
-                        <p class="entry__meta">2023 - Present · Expected Graduation: September 2027</p>
-                    </article>
-                    <article class="entry">
-                        <h3 class="entry__heading"><strong>San Felipe Neri Catholic School</strong></h3>
-                        <p class="entry__subheading">Mandaluyong City</p>
-                        <p>Senior High School - TechVoc (ICT), With Honors</p>
-                        <p class="entry__meta">2020 - 2023</p>
-                    </article>
-                </section>
+        <section class="section" aria-labelledby="education-title">
+            <h2 class="section-title" id="education-title">Education</h2>
+            <article class="entry">
+                <h3 class="entry__heading"><strong>FEU Institute of Technology</strong><span class="entry__date">Sampaloc, Manila</span></h3>
+                <p>Bachelor of Science in Information Technology, Specialization in Web and Mobile Application Development</p>
+                <p class="entry__meta">2023 - Present · Expected Graduation: September 2027</p>
+            </article>
+            <article class="entry">
+                <h3 class="entry__heading"><strong>San Felipe Neri Catholic School</strong><span class="entry__date">Mandaluyong City</span></h3>
+                <p>Senior High School - TechVoc (ICT), With Honors</p>
+                <p class="entry__meta">2020 - 2023</p>
+            </article>
+        </section>
 
-                <section class="section" aria-labelledby="skills-title">
-                    <h2 class="section-title" id="skills-title">Technical Skills</h2>
-                    <div class="skills-group">
-                        <h3>Frontend</h3>
-                        <ul class="skills-list">
-                            <li>HTML, CSS, JavaScript, Tailwind CSS</li>
-                        </ul>
-                    </div>
-                    <div class="skills-group">
-                        <h3>Mobile &amp; Backend</h3>
-                        <ul class="skills-list">
-                            <li>Flutter, Dart, Kotlin, PHP</li>
-                        </ul>
-                    </div>
-                    <div class="skills-group">
-                        <h3>Design &amp; Tools</h3>
-                        <ul class="skills-list">
-                            <li>Figma, Photoshop, Premiere Pro, After Effects, Canva</li>
-                            <li>Android Studio, Visual Studio Code</li>
-                        </ul>
-                    </div>
-                </section>
+        <section class="section" aria-labelledby="experience-title">
+            <h2 class="section-title" id="experience-title">Project Experience</h2>
+            <article class="entry">
+                <h3 class="entry__heading">
+                    <strong><a href="https://punchcentral.com" target="_blank" rel="noopener noreferrer">PunchCentral - Gym Management System</a></strong>
+                    <time class="entry__date" datetime="2026">2026</time>
+                </h3>
+                <p class="entry__subheading"><span class="entry__meta">Capstone Project · Frontend / UI/UX Designer</span></p>
+                <p>Cross-platform gym and boxing management system for members, coaches, and administrators.</p>
+                <ul class="bullet-list">
+                    <li>Designed user-focused interfaces for gym management, coach workflows, and training features.</li>
+                    <li>Worked on web layouts and mobile screens, including coach availability, account management, and course progress.</li>
+                    <li>Applied responsive design and clear navigation to make key tools easier to find and use.</li>
+                    <li>Collaborated on frontend delivery with Flutter and Dart, alongside a MySQL-backed application.</li>
+                </ul>
+            </article>
+        </section>
 
-                <section class="section" aria-labelledby="certifications-title">
-                    <h2 class="section-title" id="certifications-title">Certifications</h2>
-                    <ul class="cert-list">
-                        <li>CCNA: Enterprise Networking, Security, and Automation - Cisco</li>
-                        <li>CCNA: Introduction to Networks - Cisco</li>
-                        <li>CCNA: Switching, Routing, and Wireless Essentials - Cisco</li>
-                        <li>DevNet Associate - Cisco</li>
-                        <li>Cisco Certified Support Technician Networking - Cisco</li>
-                        <li>IT Specialist - Databases - Certiport</li>
-                        <li>IT Specialist - Python - Certiport</li>
-                        <li>PMI Project Management Ready™ - Project Management Institute</li>
-                    </ul>
-                </section>
+        <section class="section" aria-labelledby="work-experience-title">
+            <h2 class="section-title" id="work-experience-title">Work Experience</h2>
+            <article class="entry">
+                <h3 class="entry__heading">
+                    <strong>Freelance Video Editor</strong>
+                    <time class="entry__date" datetime="2022-01">Jan 2022 – Present</time>
+                </h3>
+                <p class="entry__subheading">Self-Employed</p>
+                <ul class="bullet-list">
+                    <li>Edited promotional videos, corporate content, and social media campaigns for various clients.</li>
+                    <li>Collaborated with clients to ensure the final product met project expectations.</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <h3 class="entry__heading">
+                    <strong>Junior Video Editor</strong>
+                    <time class="entry__date" datetime="2020-01">Jan 2020 – Dec 2021</time>
+                </h3>
+                <p class="entry__subheading">Creative Media</p>
+                <ul class="bullet-list">
+                    <li>Assisted in editing video content for advertising campaigns and brand promotions.</li>
+                    <li>Prepared raw footage for editing and managed post-production tasks such as color correction and audio mixing.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="section" aria-labelledby="certifications-title">
+            <h2 class="section-title" id="certifications-title">Certifications</h2>
+            <ul class="cert-list">
+                <li><a href="https://www.credly.com/earner/earned/badge/add82477-d429-4224-8c47-fec609bd96b6" target="_blank" rel="noopener noreferrer">CCNA: Enterprise Networking, Security, and Automation - Cisco</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/7411b5f2-c632-4b84-b9e8-0661a2020811" target="_blank" rel="noopener noreferrer">CCNA: Introduction to Networks - Cisco</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/61c4441c-39fb-4722-9e3d-5742ca594e98" target="_blank" rel="noopener noreferrer">CCNA: Switching, Routing, and Wireless Essentials - Cisco</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/e1af40be-79ba-40f9-8ceb-0dd01d93aa2b" target="_blank" rel="noopener noreferrer">DevNet Associate - Cisco</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/85048c5a-64eb-43ab-9c8b-9b4b2f8c3aaa" target="_blank" rel="noopener noreferrer">Cisco Certified Support Technician Networking - Cisco</a></li>
+                <li><a href="https://www.credly.com/badges/0024ff83-121a-4d4a-bcd2-1164040a855b/linked_in?t=sraus6" target="_blank" rel="noopener noreferrer">IT Specialist - Databases - Certiport</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/96293f69-d9cc-4874-a796-3e8a3d9d6fdf" target="_blank" rel="noopener noreferrer">IT Specialist - Python - Certiport</a></li>
+                <li><a href="https://www.credly.com/earner/earned/badge/fa82be1d-4e2e-424d-b6aa-1cef8f6b122d" target="_blank" rel="noopener noreferrer">PMI Project Management Ready™ - Project Management Institute</a></li>
+            </ul>
+        </section>
+
+        <section class="section" aria-labelledby="additional-title">
+            <h2 class="section-title" id="additional-title">Additional</h2>
+            <div class="additional-details">
+                <p><strong>Familiar with:</strong> HTML, CSS, JavaScript, Flutter, Dart, Kotlin, PHP, Premiere Pro, After Effects, Canva, Android Studio, Version Control, and Git.</p>
+                <p><strong>Project experience:</strong> Frontend development, UI/UX design, and Backend development.</p>
+                <p><strong>Core Competencies:</strong> Communication, Analytical Problem-Solving, Adaptability, Fast-Learner  |  Languages: English, Filipino</p>
             </div>
+        </section>
 
-            <div>
-                <section class="section" aria-labelledby="work-experience-title">
-                    <h2 class="section-title" id="work-experience-title">Work Experience</h2>
-                    <article class="entry">
-                        <h3 class="entry__heading">
-                            <strong>Freelance Video Editor</strong>
-                            <time class="entry__date" datetime="2022-01">Jan 2022 – Present</time>
-                        </h3>
-                        <p class="entry__subheading">Self-Employed</p>
-                        <ul class="bullet-list">
-                            <li>Edited promotional videos, corporate content, and social media campaigns for various clients.</li>
-                            <li>Collaborated with clients to ensure the final product met project expectations.</li>
-                        </ul>
-                    </article>
-                    <article class="entry">
-                        <h3 class="entry__heading">
-                            <strong>Junior Video Editor</strong>
-                            <time class="entry__date" datetime="2020-01">Jan 2020 – Dec 2021</time>
-                        </h3>
-                        <p class="entry__subheading">Creative Media</p>
-                        <ul class="bullet-list">
-                            <li>Assisted in editing video content for advertising campaigns and brand promotions.</li>
-                            <li>Prepared raw footage for editing and managed post-production tasks such as color correction and audio mixing.</li>
-                        </ul>
-                    </article>
-                </section>
-
-                <section class="section" aria-labelledby="experience-title">
-                    <h2 class="section-title" id="experience-title">Project Experience</h2>
-                    <article class="entry">
-                        <h3 class="entry__heading">
-                            <strong>PunchCentral - Gym Management System</strong>
-                            <time class="entry__date" datetime="2026">2026</time>
-                        </h3>
-                        <p class="entry__subheading"><span class="entry__meta">Capstone Project · Frontend / UI/UX Designer</span></p>
-                        <p>Cross-platform gym and boxing management system for members, coaches, and administrators.</p>
-                        <ul class="bullet-list">
-                            <li>Designed user-focused interfaces for gym management, coach workflows, and training features.</li>
-                            <li>Worked on web layouts and mobile screens, including coach availability, account management, and course progress.</li>
-                            <li>Applied responsive design and clear navigation to make key tools easier to find and use.</li>
-                            <li>Collaborated on frontend delivery with Flutter and Dart, alongside a MySQL-backed application.</li>
-                        </ul>
-                    </article>
-                </section>
-
-                <section class="section" aria-labelledby="organizations-title">
-                    <h2 class="section-title" id="organizations-title">Organizations</h2>
-                    <div class="organization">
-                        <strong>FEU Tech Alliance of Information Technology Students (AITS)</strong>
-                        Organization Member · 2024 – 2025
-                    </div>
-                </section>
+        <section class="section" aria-labelledby="organizations-title">
+            <h2 class="section-title" id="organizations-title">Organizations</h2>
+            <div class="organization">
+                <strong><a href="https://www.facebook.com/feutechAITS" target="_blank" rel="noopener noreferrer">FEU Tech Alliance of Information Technology Students (AITS)</a></strong>
+                Organization Member · 2024 – 2025
             </div>
-        </div>
+        </section>
+
+        <section class="section" aria-labelledby="references-title">
+            <h2 class="section-title" id="references-title">References</h2>
+            <div class="reference">
+                <strong>Jocelyn Tejada</strong>
+                <span>IT Faculty</span>
+                <button class="contact-list__copy" type="button" data-copy-text="+63 976 392 7656" data-copy-label="Phone number">+63 976 392 7656</button>
+                <button class="contact-list__copy" type="button" data-copy-text="iftejada@feutech.edu.ph" data-copy-label="Email">iftejada@feutech.edu.ph</button>
+            </div>
+        </section>
     </main>
     <button class="print-button" type="button" onclick="window.print()">Print / Save PDF</button>
+    <script>
+        const copyStatus = document.getElementById("contact-copy-status");
+        let copyStatusTimeout;
+        let copyStatusClearTimeout;
+
+        document.querySelectorAll(".contact-list__copy").forEach((button) => {
+            button.addEventListener("click", async () => {
+                const value = button.dataset.copyText;
+                const label = button.dataset.copyLabel;
+
+                window.clearTimeout(copyStatusTimeout);
+                window.clearTimeout(copyStatusClearTimeout);
+
+                try {
+                    if (!navigator.clipboard) {
+                        throw new Error("Clipboard API is unavailable.");
+                    }
+
+                    await navigator.clipboard.writeText(value);
+                    copyStatus.dataset.state = "success";
+                    copyStatus.textContent = "Copied to clipboard.";
+                } catch (error) {
+                    copyStatus.dataset.state = "error";
+                    copyStatus.textContent = `${label} could not be copied. Copy manually: ${value}`;
+                }
+
+                copyStatus.classList.add("is-visible");
+                copyStatusTimeout = window.setTimeout(() => {
+                    copyStatus.classList.remove("is-visible");
+                    copyStatusClearTimeout = window.setTimeout(() => {
+                        copyStatus.textContent = "";
+                        delete copyStatus.dataset.state;
+                    }, 250);
+                }, 3000);
+            });
+        });
+    </script>
 </body>
 </html>
