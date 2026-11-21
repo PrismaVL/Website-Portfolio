@@ -224,6 +224,74 @@ document.addEventListener("click", (event) => {
     navigationFrame = requestAnimationFrame(animateNavigation);
 });
 
+const navToggle = document.querySelector(".nav-toggle");
+const mainNavigation = document.getElementById("main-navigation");
+const navScrim = document.querySelector(".nav-scrim");
+
+if (navToggle && mainNavigation && navScrim) {
+    function setNavigationOpen(isOpen) {
+        document.body.classList.toggle("nav-open", isOpen);
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+        navToggle.querySelector(".sr-only").textContent = isOpen
+            ? "Close navigation menu"
+            : "Open navigation menu";
+    }
+
+    navToggle.addEventListener("click", () => {
+        setNavigationOpen(navToggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    navScrim.addEventListener("click", () => setNavigationOpen(false));
+    mainNavigation.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => setNavigationOpen(false));
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && navToggle.getAttribute("aria-expanded") === "true") {
+            setNavigationOpen(false);
+            navToggle.focus();
+        }
+    });
+}
+
+function enableSwipeNavigation(viewport, onSwipe) {
+    let startX = 0;
+    let startY = 0;
+    let activePointerId = null;
+
+    viewport.addEventListener("pointerdown", (event) => {
+        if ((event.pointerType === "mouse" && event.button !== 0)
+            || event.target.closest(".project-card__gallery")) {
+            return;
+        }
+
+        activePointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        viewport.setPointerCapture?.(event.pointerId);
+    });
+
+    viewport.addEventListener("pointerup", (event) => {
+        if (event.pointerId !== activePointerId) {
+            return;
+        }
+
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
+        activePointerId = null;
+
+        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) {
+            return;
+        }
+
+        onSwipe(deltaX < 0 ? 1 : -1);
+    });
+
+    viewport.addEventListener("pointercancel", () => {
+        activePointerId = null;
+    });
+}
+
 const aboutSection = document.getElementById("about");
 const backToTop = document.querySelector(".back-to-top");
 
@@ -436,6 +504,10 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
         }
     });
 
+    enableSwipeNavigation(viewport, (direction) => {
+        updateSlide(activeIndex + direction);
+    });
+
     updateCategory(activeCategory, false);
     window.addEventListener("resize", () => updateViewportHeight(false));
 });
@@ -560,6 +632,10 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
             event.preventDefault();
             updatePage(activePage + (event.key === "ArrowRight" ? 1 : -1));
         }
+    });
+
+    enableSwipeNavigation(carousel.querySelector(".certification-carousel__viewport"), (direction) => {
+        updatePage(activePage + direction);
     });
 
     updatePage(activePage);

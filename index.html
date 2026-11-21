@@ -31,7 +31,14 @@
 
     <header class="site-header">
         <a class="wordmark" href="#home">Prisma</a>
-        <nav aria-label="Main navigation">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">
+            <span class="nav-toggle__line"></span>
+            <span class="nav-toggle__line"></span>
+            <span class="nav-toggle__line"></span>
+            <span class="sr-only">Open navigation menu</span>
+        </button>
+        <div class="nav-scrim" aria-hidden="true"></div>
+        <nav id="main-navigation" aria-label="Main navigation">
             <a href="#home">Home</a>
             <a href="#about">About Me</a>
             <a href="#stack">Stacks</a>
@@ -51,7 +58,7 @@
                 <h1>Jaymard T.<br><span>Licas</span></h1>
                 <p class="hero__role">UI/UX Designer | Video Editor</p>
                 <blockquote class="hero__quote">"I bring ideas to life through thoughtful, minimal, and aesthetically pleasing design."</blockquote>
-                <a class="hero__link" href="#projects">Explore my work <span aria-hidden="true">↘</span></a>
+                <a class="hero__link" href="#projects">Explore my work</a>
             </div>
             <div class="hero__details" aria-label="Profile details">
                 <div><span>BRAND</span><strong>Prisma</strong></div>
@@ -476,7 +483,7 @@
             <p class="eyebrow">Credentials</p>
             <div class="certifications-header">
                 <h2 id="certifications-title">Certifications</h2>
-                <a class="certification-all-link" href="https://www.credly.com/users/jaymard-licas.98e65592/badges/credly" target="_blank" rel="noopener noreferrer">All Certifications <span aria-hidden="true">↗</span></a>
+                <a class="certification-all-link" href="https://www.credly.com/users/jaymard-licas.98e65592/badges/credly" target="_blank" rel="noopener noreferrer">All Certifications</a>
             </div>
             <div class="certification-carousel" role="region" aria-roledescription="carousel" aria-label="Certifications" tabindex="0">
                 <div class="certification-carousel__viewport">
