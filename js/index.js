@@ -503,7 +503,7 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
         activePage = (page + pageCount) % pageCount;
         const firstVisibleIndex = activePage * visibleCount;
         const lastVisibleIndex = Math.min(firstVisibleIndex + visibleCount, slides.length);
-        track.style.transform = `translateX(-${firstVisibleIndex / slides.length * 100}%)`;
+        track.style.transform = `translateX(-${firstVisibleIndex / visibleCount * carousel.clientWidth}px)`;
         status.textContent = `${String(firstVisibleIndex + 1).padStart(2, "0")}–${String(lastVisibleIndex).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
 
         slides.forEach((slide, slideIndex) => {
@@ -575,7 +575,8 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
             pageCount = Math.ceil(slides.length / visibleCount);
             activePage = Math.min(activePage, pageCount - 1);
             renderPagination();
-            updatePage(activePage);
         }
+
+        updatePage(activePage);
     });
 });
