@@ -227,6 +227,7 @@ document.addEventListener("click", (event) => {
 const navToggle = document.querySelector(".nav-toggle");
 const mainNavigation = document.getElementById("main-navigation");
 const navScrim = document.querySelector(".nav-scrim");
+const navSheetHandle = document.querySelector(".nav-sheet-handle");
 
 if (navToggle && mainNavigation && navScrim) {
     function setNavigationOpen(isOpen) {
@@ -246,12 +247,82 @@ if (navToggle && mainNavigation && navScrim) {
         link.addEventListener("click", () => setNavigationOpen(false));
     });
 
+    if (navSheetHandle) {
+        let dragStartY = null;
+
+        navSheetHandle.addEventListener("pointerdown", (event) => {
+            dragStartY = event.clientY;
+            navSheetHandle.setPointerCapture?.(event.pointerId);
+            mainNavigation.style.transition = "none";
+        });
+
+        navSheetHandle.addEventListener("pointermove", (event) => {
+            if (dragStartY === null) {
+                return;
+            }
+
+            event.preventDefault();
+            const distance = Math.max(0, event.clientY - dragStartY);
+            mainNavigation.style.transform = `translateY(${distance}px)`;
+        });
+
+        const finishSheetDrag = (event) => {
+            if (dragStartY === null) {
+                return;
+            }
+
+            const distance = Math.max(0, event.clientY - dragStartY);
+            dragStartY = null;
+            mainNavigation.style.transition = "";
+            mainNavigation.style.removeProperty("transform");
+
+            if (distance > 80) {
+                setNavigationOpen(false);
+            }
+        };
+
+        navSheetHandle.addEventListener("pointerup", finishSheetDrag);
+        navSheetHandle.addEventListener("pointercancel", finishSheetDrag);
+    }
+
     document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && navToggle.getAttribute("aria-expanded") === "true") {
             setNavigationOpen(false);
             navToggle.focus();
         }
     });
+}
+
+const navigationLinks = [...document.querySelectorAll("#main-navigation a")];
+const navigationSections = navigationLinks
+    .map((link) => document.getElementById(link.hash.slice(1)))
+    .filter(Boolean);
+
+if (navigationLinks.length && navigationSections.length) {
+    function updateCurrentNavigation() {
+        const marker = window.innerHeight * 0.35;
+        let currentId = navigationSections[0].id;
+
+        navigationSections.forEach((section) => {
+            if (section.getBoundingClientRect().top <= marker) {
+                currentId = section.id;
+            }
+        });
+
+        navigationLinks.forEach((link) => {
+            const isCurrent = link.hash === `#${currentId}`;
+            link.classList.toggle("is-current", isCurrent);
+            if (isCurrent) {
+                link.setAttribute("aria-current", "page");
+            } else {
+                link.removeAttribute("aria-current");
+            }
+        });
+    }
+
+    window.addEventListener("scroll", updateCurrentNavigation, { passive: true });
+    window.addEventListener("resize", updateCurrentNavigation);
+    updateCurrentNavigation();
 }
 
 function enableSwipeNavigation(viewport, onSwipe) {
