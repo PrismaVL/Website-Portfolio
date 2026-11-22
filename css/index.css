@@ -1666,6 +1666,12 @@ nav a:focus-visible {
     }
 }
 
+@media (min-width: 641px) {
+    .site-header nav .nav-icon {
+        display: none;
+    }
+}
+
 @media (min-width: 641px) and (max-width: 850px) {
     .hero {
         gap: 36px;
