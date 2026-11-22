@@ -416,6 +416,7 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     let sectionScrollFrame;
 
     const projectTitles = Array.from(carousel.querySelectorAll(".project-card__info h3"));
+
     projectTitles.forEach((title) => {
         const text = title.textContent.trim();
         const titleTrack = document.createElement("span");
@@ -777,3 +778,19 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
         updatePage(activePage);
     });
 });
+
+if (!prefersReducedMotion.matches) {
+    document.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "touch"
+            || event.target.closest("a, button, input, textarea, select, [role=button]")) {
+            return;
+        }
+
+        const ripple = document.createElement("span");
+        ripple.className = "tap-ripple";
+        ripple.style.left = `${event.clientX}px`;
+        ripple.style.top = `${event.clientY}px`;
+        ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+        document.body.append(ripple);
+    }, { passive: true });
+}

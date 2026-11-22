@@ -106,6 +106,32 @@ body {
     line-height: 1.6;
 }
 
+.tap-ripple {
+    position: fixed;
+    z-index: 40;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(242, 242, 235, 0.82);
+    background: radial-gradient(circle, rgba(215, 212, 224, 0.16), transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 16px rgba(215, 212, 224, 0.22);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: tap-ripple-expand 600ms ease-out forwards;
+}
+
+@keyframes tap-ripple-expand {
+    from {
+        opacity: 0.8;
+        box-shadow: 0 0 0 0 rgba(215, 212, 224, 0.25);
+    }
+
+    to {
+        opacity: 0;
+        box-shadow: 0 0 0 42px rgba(215, 212, 224, 0);
+    }
+}
+
 a {
     color: inherit;
 }
