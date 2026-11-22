@@ -415,6 +415,36 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     let viewportAnimation;
     let sectionScrollFrame;
 
+    const projectTitles = Array.from(carousel.querySelectorAll(".project-card__info h3"));
+    projectTitles.forEach((title) => {
+        const text = title.textContent.trim();
+        const titleTrack = document.createElement("span");
+        titleTrack.className = "project-title__track";
+
+        [false, true].forEach((isDuplicate) => {
+            const titleText = document.createElement("span");
+            titleText.className = "project-title__text";
+            titleText.textContent = text;
+            if (isDuplicate) {
+                titleText.setAttribute("aria-hidden", "true");
+            }
+            titleTrack.append(titleText);
+        });
+
+        title.replaceChildren(titleTrack);
+    });
+
+    function updateProjectTitleMarquees() {
+        const isMobile = window.matchMedia("(max-width: 640px)").matches;
+        projectTitles.forEach((title) => {
+            const firstText = title.querySelector(".project-title__text");
+            title.classList.toggle(
+                "is-marquee",
+                isMobile && firstText.scrollWidth > title.clientWidth
+            );
+        });
+    }
+
     function scrollFiltersIntoPosition(targetTop) {
         cancelAnimationFrame(sectionScrollFrame);
         sectionScrollFrame = 0;
@@ -495,8 +525,10 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
     }
 
     function updateSlide(index, animateHeight = true) {
+        const previousIndex = activeIndex;
+        const direction = index >= previousIndex ? "next" : "previous";
         activeIndex = (index + visibleSlides.length) % visibleSlides.length;
-        track.style.transform = `translateX(-${activeIndex * 100}%)`;
+        track.style.transform = `translate3d(-${activeIndex * viewport.clientWidth}px, 0, 0)`;
         status.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(visibleSlides.length).padStart(2, "0")}`;
 
         visibleSlides.forEach((slide, slideIndex) => {
@@ -504,8 +536,15 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
             slide.setAttribute("aria-label", `${slideIndex + 1} of ${visibleSlides.length}`);
             slide.setAttribute("aria-hidden", String(!isActive));
             slide.toggleAttribute("inert", !isActive);
+            slide.classList.toggle("is-active", isActive);
+            slide.classList.remove("slide-from-next", "slide-from-previous");
+            if (isActive && animateHeight && activeIndex !== previousIndex) {
+                slide.classList.add(`slide-from-${direction}`);
+            }
             dots[slideIndex].setAttribute("aria-current", String(isActive));
         });
+
+        updateProjectTitleMarquees();
 
         updateViewportHeight(animateHeight);
 
@@ -535,6 +574,7 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
             slide.hidden = !isVisible;
             slide.setAttribute("aria-hidden", "true");
             slide.toggleAttribute("inert", !isVisible);
+            slide.classList.remove("is-active");
         });
 
         filters.forEach((filter) => {
@@ -559,6 +599,10 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
         filter.addEventListener("click", () => updateCategory(filter.dataset.category));
     });
 
+    window.addEventListener("resize", () => {
+        track.style.transform = `translate3d(-${activeIndex * viewport.clientWidth}px, 0, 0)`;
+    });
+
     carousel.querySelectorAll(".project-carousel__arrow").forEach((button) => {
         button.addEventListener("click", () => {
             updateSlide(activeIndex + Number(button.dataset.direction));
@@ -581,6 +625,8 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
 
     updateCategory(activeCategory, false);
     window.addEventListener("resize", () => updateViewportHeight(false));
+    window.addEventListener("resize", updateProjectTitleMarquees);
+    updateProjectTitleMarquees();
 });
 
 document.querySelectorAll(".project-card__gallery").forEach((gallery) => {
@@ -647,7 +693,11 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
         const firstVisibleIndex = activePage * visibleCount;
         const lastVisibleIndex = Math.min(firstVisibleIndex + visibleCount, slides.length);
         track.style.transform = `translateX(-${firstVisibleIndex / visibleCount * carousel.clientWidth}px)`;
-        status.textContent = `${String(firstVisibleIndex + 1).padStart(2, "0")}–${String(lastVisibleIndex).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+        const firstVisibleLabel = String(firstVisibleIndex + 1).padStart(2, "0");
+        const totalLabel = String(slides.length).padStart(2, "0");
+        status.textContent = window.matchMedia("(max-width: 640px)").matches
+            ? `${firstVisibleLabel} / ${totalLabel}`
+            : `${firstVisibleLabel}\u2013${String(lastVisibleIndex).padStart(2, "0")} / ${totalLabel}`;
 
         slides.forEach((slide, slideIndex) => {
             const isActive = slideIndex >= firstVisibleIndex && slideIndex < lastVisibleIndex;
