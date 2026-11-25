@@ -830,22 +830,50 @@ nav a:focus-visible {
     object-fit: contain;
 }
 
-.project-card__image--changing {
-    animation: project-preview-change 420ms ease both;
+.project-card__image--transitioning-out,
+.project-card__image--transitioning-in {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation-duration: 700ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: both;
 }
 
-@keyframes project-preview-change {
-    from {
-        opacity: 0.35;
-        filter: blur(3px);
-        transform: scale(0.985);
-    }
+.project-card__image--transitioning-out.project-card__image--from-left {
+    animation-name: project-preview-slide-out-right;
+}
 
-    to {
-        opacity: 1;
-        filter: blur(0);
-        transform: scale(1);
-    }
+.project-card__image--transitioning-out.project-card__image--from-right {
+    animation-name: project-preview-slide-out-left;
+}
+
+.project-card__image--transitioning-in.project-card__image--from-left {
+    animation-name: project-preview-slide-in-left;
+}
+
+.project-card__image--transitioning-in.project-card__image--from-right {
+    animation-name: project-preview-slide-in-right;
+}
+
+@keyframes project-preview-slide-out-left {
+    to { transform: translateX(-100%); }
+}
+
+@keyframes project-preview-slide-out-right {
+    to { transform: translateX(100%); }
+}
+
+@keyframes project-preview-slide-in-left {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes project-preview-slide-in-right {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
 }
 
 .project-card__preview::before,
@@ -1680,6 +1708,17 @@ nav a:focus-visible {
         object-fit: contain;
     }
 
+    .project-card__preview--image .project-card__image--transitioning-out,
+    .project-card__preview--image .project-card__image--transitioning-in {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        object-fit: contain;
+    }
+
     .project-card__preview--video {
         width: 100%;
         max-width: 100%;
@@ -1830,8 +1869,10 @@ nav a:focus-visible {
         transition: none;
     }
 
-    .project-card__image--changing {
+    .project-card__image--transitioning-out,
+    .project-card__image--transitioning-in {
         animation: none;
+        transform: none;
     }
 
     .intro,

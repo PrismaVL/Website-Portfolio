@@ -634,20 +634,84 @@ document.querySelectorAll(".project-card__gallery").forEach((gallery) => {
     const card = gallery.closest(".project-card");
     const preview = card.querySelector(".project-card__image");
     const thumbnails = Array.from(gallery.querySelectorAll(".project-card__thumbnail"));
+    let imageRequestId = 0;
+    let isTransitioning = false;
 
     thumbnails.forEach((thumbnail) => {
         thumbnail.addEventListener("click", () => {
-            if (preview.getAttribute("src") === thumbnail.dataset.previewImage) {
+            if (isTransitioning || preview.getAttribute("src") === thumbnail.dataset.previewImage) {
                 return;
             }
 
-            preview.classList.remove("project-card__image--changing");
-            void preview.offsetWidth;
-            preview.src = thumbnail.dataset.previewImage;
-            preview.classList.add("project-card__image--changing");
-            thumbnails.forEach((item) => {
-                item.setAttribute("aria-pressed", String(item === thumbnail));
-            });
+            isTransitioning = true;
+            const currentIndex = thumbnails.findIndex((item) => item.getAttribute("aria-pressed") === "true");
+            const nextIndex = thumbnails.indexOf(thumbnail);
+            const slideDirection = nextIndex < currentIndex ? "left" : "right";
+            const requestedImage = thumbnail.dataset.previewImage;
+            const requestId = ++imageRequestId;
+            const preloadedImage = new Image();
+
+            preloadedImage.onload = () => {
+                if (requestId !== imageRequestId) {
+                    isTransitioning = false;
+                    return;
+                }
+
+                const previousTransition = card.querySelector(".project-card__image--transitioning-in");
+                previousTransition?.remove();
+                preview.classList.remove(
+                    "project-card__image--transitioning-out",
+                    "project-card__image--from-left",
+                    "project-card__image--from-right"
+                );
+
+                if (prefersReducedMotion.matches) {
+                    preview.src = requestedImage;
+                    isTransitioning = false;
+                } else {
+                    const incomingPreview = preview.cloneNode(true);
+                    incomingPreview.src = requestedImage;
+                    incomingPreview.classList.remove("project-card__image--transitioning-out");
+                    incomingPreview.classList.add(
+                        "project-card__image--transitioning-in",
+                        `project-card__image--from-${slideDirection}`
+                    );
+                    incomingPreview.setAttribute("aria-hidden", "true");
+
+                    preview.classList.add(
+                        "project-card__image--transitioning-out",
+                        `project-card__image--from-${slideDirection}`
+                    );
+                    preview.parentElement.append(incomingPreview);
+
+                    incomingPreview.addEventListener("animationend", () => {
+                        if (requestId !== imageRequestId) {
+                            return;
+                        }
+
+                        preview.src = requestedImage;
+                        preview.classList.remove(
+                            "project-card__image--transitioning-out",
+                            "project-card__image--from-left",
+                            "project-card__image--from-right"
+                        );
+                        incomingPreview.remove();
+                        isTransitioning = false;
+                    }, { once: true });
+                }
+
+                thumbnails.forEach((item) => {
+                    item.setAttribute("aria-pressed", String(item === thumbnail));
+                });
+            };
+
+            preloadedImage.onerror = () => {
+                if (requestId === imageRequestId) {
+                    isTransitioning = false;
+                }
+            };
+
+            preloadedImage.src = requestedImage;
         });
     });
 });
