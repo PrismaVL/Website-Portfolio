@@ -331,7 +331,8 @@ function enableSwipeNavigation(viewport, onSwipe) {
     let activePointerId = null;
 
     viewport.addEventListener("pointerdown", (event) => {
-        if ((event.pointerType === "mouse" && event.button !== 0)
+        if (!window.matchMedia("(max-width: 640px)").matches
+            || (event.pointerType === "mouse" && event.button !== 0)
             || event.target.closest(".project-card__gallery")) {
             return;
         }
