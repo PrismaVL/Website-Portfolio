@@ -383,12 +383,89 @@ if (aboutSection && backToTop) {
 const scrollProgress = document.querySelector(".scroll-progress__fill");
 
 if (scrollProgress) {
+    const scrollRail = scrollProgress.closest(".scroll-progress");
+
     function updateScrollProgress() {
         const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = scrollableHeight > 0
             ? Math.min(window.scrollY / scrollableHeight, 1)
             : 0;
         scrollProgress.style.setProperty("--scroll-progress", `${progress * 100}%`);
+        scrollRail?.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
+    }
+
+    if (scrollRail) {
+        let isDragging = false;
+
+        function scrollToRailPosition(clientY) {
+            const bounds = scrollRail.getBoundingClientRect();
+            const progress = Math.max(0, Math.min((clientY - bounds.top) / bounds.height, 1));
+            const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+            stopWheelScroll();
+            window.scrollTo({
+                top: progress * maxScrollY,
+                behavior: "instant"
+            });
+        }
+
+        scrollRail.addEventListener("pointerdown", (event) => {
+            if (event.pointerType === "mouse" && event.button !== 0) {
+                return;
+            }
+
+            isDragging = true;
+            scrollRail.setPointerCapture?.(event.pointerId);
+            scrollToRailPosition(event.clientY);
+            event.preventDefault();
+        });
+
+        scrollRail.addEventListener("pointermove", (event) => {
+            if (!isDragging) {
+                return;
+            }
+
+            scrollToRailPosition(event.clientY);
+            event.preventDefault();
+        });
+
+        const stopRailDrag = (event) => {
+            if (!isDragging) {
+                return;
+            }
+
+            isDragging = false;
+            scrollRail.releasePointerCapture?.(event.pointerId);
+        };
+
+        scrollRail.addEventListener("pointerup", stopRailDrag);
+        scrollRail.addEventListener("pointercancel", stopRailDrag);
+
+        scrollRail.addEventListener("keydown", (event) => {
+            const step = window.innerHeight * 0.1;
+            let nextScrollY;
+
+            if (event.key === "ArrowDown") {
+                nextScrollY = window.scrollY + step;
+            } else if (event.key === "ArrowUp") {
+                nextScrollY = window.scrollY - step;
+            } else if (event.key === "PageDown") {
+                nextScrollY = window.scrollY + window.innerHeight;
+            } else if (event.key === "PageUp") {
+                nextScrollY = window.scrollY - window.innerHeight;
+            } else if (event.key === "Home") {
+                nextScrollY = 0;
+            } else if (event.key === "End") {
+                nextScrollY = document.documentElement.scrollHeight - window.innerHeight;
+            }
+
+            if (nextScrollY === undefined) {
+                return;
+            }
+
+            event.preventDefault();
+            stopWheelScroll();
+            window.scrollTo({ top: nextScrollY, behavior: "instant" });
+        });
     }
 
     window.addEventListener("scroll", updateScrollProgress, { passive: true });
