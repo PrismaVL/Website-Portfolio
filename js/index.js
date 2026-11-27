@@ -811,6 +811,17 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
     const viewedSlides = new Set();
     let carouselIsVisible = false;
 
+    function focusCertificationSection() {
+        const targetTop = Math.min(165, window.innerHeight * 0.35);
+        const start = window.scrollY;
+        const end = Math.max(0, Math.min(
+            start + carousel.getBoundingClientRect().top - targetTop,
+            document.documentElement.scrollHeight - window.innerHeight
+        ));
+
+        window.scrollTo({ top: end, behavior: "instant" });
+    }
+
     if (shouldAnimateCards) {
         slides.forEach((slide) => slide.classList.add("certification-card--reveal"));
     }
@@ -863,7 +874,10 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
             button.className = "certification-carousel__dot";
             button.type = "button";
             button.setAttribute("aria-label", `Show certifications ${index * visibleCount + 1} to ${Math.min((index + 1) * visibleCount, slides.length)}`);
-            button.addEventListener("click", () => updatePage(index));
+            button.addEventListener("click", () => {
+                updatePage(index);
+                focusCertificationSection();
+            });
             pagination.append(button);
             return button;
         });
