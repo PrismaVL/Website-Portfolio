@@ -135,19 +135,14 @@ if (!prefersReducedMotion.matches) {
         const delta = event.deltaY * (event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
             : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerHeight
             : 1);
-        const absoluteDelta = Math.abs(event.deltaY);
-        const isMouseWheel = event.deltaMode === WheelEvent.DOM_DELTA_LINE
-            || (event.deltaMode === WheelEvent.DOM_DELTA_PIXEL
-                && absoluteDelta >= 80
-                && (absoluteDelta % 100 === 0 || absoluteDelta % 120 === 0));
         const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
-        scrollEase = isMouseWheel ? 240 : 100;
+        scrollEase = 100;
 
         if (!scrollFrame) {
             targetScrollY = window.scrollY;
         }
 
-        targetScrollY = Math.max(0, Math.min(targetScrollY + delta * (isMouseWheel ? 0.5 : 1), maxScrollY));
+        targetScrollY = Math.max(0, Math.min(targetScrollY + delta, maxScrollY));
         event.preventDefault();
 
         if (!scrollFrame) {
@@ -473,6 +468,25 @@ if (scrollProgress) {
     updateScrollProgress();
 }
 
+function getMostVisibleCarousel() {
+    let mostVisibleCarousel = null;
+    let mostVisibleArea = 0;
+
+    document.querySelectorAll(".project-carousel, .certification-carousel").forEach((carousel) => {
+        const bounds = carousel.getBoundingClientRect();
+        const visibleWidth = Math.max(0, Math.min(bounds.right, window.innerWidth) - Math.max(bounds.left, 0));
+        const visibleHeight = Math.max(0, Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0));
+        const visibleArea = visibleWidth * visibleHeight;
+
+        if (visibleArea > mostVisibleArea) {
+            mostVisibleArea = visibleArea;
+            mostVisibleCarousel = carousel;
+        }
+    });
+
+    return mostVisibleCarousel;
+}
+
 document.querySelectorAll(".project-carousel").forEach((carousel) => {
     const track = carousel.querySelector(".project-carousel__track");
     const viewport = carousel.querySelector(".project-carousel__viewport");
@@ -688,9 +702,11 @@ document.querySelectorAll(".project-carousel").forEach((carousel) => {
         });
     });
 
-    carousel.addEventListener("keydown", (event) => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-            if (event.target.closest(".project-card__gallery")) {
+            if (getMostVisibleCarousel() !== carousel
+                || event.target.closest(".project-card__gallery")
+                || event.target.closest("input, textarea, select, [contenteditable='true']")) {
                 return;
             }
             event.preventDefault();
@@ -810,17 +826,57 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
     const shouldAnimateCards = !prefersReducedMotion.matches && "IntersectionObserver" in window;
     const viewedSlides = new Set();
     let carouselIsVisible = false;
+    let sectionScrollFrame = 0;
 
     function focusCertificationSection() {
-        const targetTop = Math.min(165, window.innerHeight * 0.35);
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+
         const start = window.scrollY;
+        const bounds = carousel.getBoundingClientRect();
         const end = Math.max(0, Math.min(
-            start + carousel.getBoundingClientRect().top - targetTop,
+            start + bounds.top + bounds.height / 2 - window.innerHeight / 2,
             document.documentElement.scrollHeight - window.innerHeight
         ));
 
-        window.scrollTo({ top: end, behavior: "instant" });
+        if (prefersReducedMotion.matches || Math.abs(end - start) < 1) {
+            window.scrollTo({ top: end, behavior: "instant" });
+            return;
+        }
+
+        const duration = 600;
+        let animationStart;
+
+        function animateScroll(timestamp) {
+            if (animationStart === undefined) {
+                animationStart = timestamp;
+            }
+
+            const progress = Math.min((timestamp - animationStart) / duration, 1);
+            const easedProgress = 1 - (1 - progress) ** 3;
+            window.scrollTo({
+                top: start + (end - start) * easedProgress,
+                behavior: "instant"
+            });
+
+            if (progress < 1) {
+                sectionScrollFrame = requestAnimationFrame(animateScroll);
+            } else {
+                sectionScrollFrame = 0;
+            }
+        }
+
+        sectionScrollFrame = requestAnimationFrame(animateScroll);
     }
+
+    window.addEventListener("wheel", () => {
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+    }, { passive: true });
+    window.addEventListener("touchstart", () => {
+        cancelAnimationFrame(sectionScrollFrame);
+        sectionScrollFrame = 0;
+    }, { passive: true });
 
     if (shouldAnimateCards) {
         slides.forEach((slide) => slide.classList.add("certification-card--reveal"));
@@ -902,13 +958,19 @@ document.querySelectorAll(".certification-carousel").forEach((carousel) => {
     arrows.forEach((button) => {
         button.addEventListener("click", () => {
             updatePage(activePage + Number(button.dataset.direction));
+            focusCertificationSection();
         });
     });
 
-    carousel.addEventListener("keydown", (event) => {
+    document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            if (getMostVisibleCarousel() !== carousel
+                || event.target.closest("input, textarea, select, [contenteditable='true']")) {
+                return;
+            }
             event.preventDefault();
             updatePage(activePage + (event.key === "ArrowRight" ? 1 : -1));
+            focusCertificationSection();
         }
     });
 
